@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.domain.entity;
+package com.fiap.tech.restaurante.adapter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Reservation {
+public class ResponseReservationDTO {
     private UUID id;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
