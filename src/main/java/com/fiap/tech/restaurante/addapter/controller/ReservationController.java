@@ -16,13 +16,15 @@ import java.util.UUID;
 public class ReservationController {
 
     private final UpdateReservationUseCase updateReservationUseCase;
+    private final ReservationMapper reservationMapper;
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseReservationDTO updateReservation(
             @PathVariable UUID id,
             @RequestBody RequestReservationDTO request) {
-        return  new ReservationMapper().toDTO(
+
+        return reservationMapper.toDTO(
                 updateReservationUseCase.updateReservation(
                         id,
                         request.getRestaurantId(),
@@ -33,5 +35,4 @@ public class ReservationController {
                         request.getNumberOfSeats()
                 ));
     }
-
 }
