@@ -15,9 +15,10 @@ public class ReservationRepositoryImpl implements  ReservationRepository{
 
     @Autowired
 private  final JpaReservationRepository repository;
+    private  final  ReservationMapper mapper;
 
     @Override
     public  Reservation     findReservationById(UUID id){
-        return repository.findById(id).map(entity -> new ReservationMapper().toDomain(entity)).orElse(null);
+        return repository.findById(id).map(entity -> mapper.toDomain(entity)).orElse(null);
     }
 }

@@ -1,6 +1,9 @@
 package com.fiap.tech.restaurante.infrastructure.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reservations")
+@Table(name = "reservation")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,12 +21,11 @@ import java.util.UUID;
 public class ReservationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "update_date")
-    private LocalDateTime updateDate;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

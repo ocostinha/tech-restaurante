@@ -1,11 +1,12 @@
-com\fiap\tech\restaurante\domain\repository\ReservationRepository.class
-com\fiap\tech\restaurante\adapter\controller\ReservationController.class
 com\fiap\tech\restaurante\RestauranteApplication.class
-com\fiap\tech\restaurante\domain\entity\Reservation.class
 com\fiap\tech\restaurante\infrastructure\entity\ReservationEntity.class
 com\fiap\tech\restaurante\infrastructure\repository\JpaReservationRepository.class
-com\fiap\tech\restaurante\exception\ReservationNotFoundException.class
 com\fiap\tech\restaurante\adapter\dto\ResponseReservationDTO.class
+com\fiap\tech\restaurante\domain\repository\ReservationRepository.class
+com\fiap\tech\restaurante\adapter\controller\ReservationController.class
+com\fiap\tech\restaurante\domain\entity\Reservation.class
+com\fiap\tech\restaurante\exception\ReservationNotFoundException.class
 com\fiap\tech\restaurante\domain\repository\ReservationRepositoryImpl.class
 com\fiap\tech\restaurante\usecase\FindReservationUseCase.class
+com\fiap\tech\restaurante\exception\UnprocessableEntityException.class
 com\fiap\tech\restaurante\adapter\mapper\ReservationMapper.class

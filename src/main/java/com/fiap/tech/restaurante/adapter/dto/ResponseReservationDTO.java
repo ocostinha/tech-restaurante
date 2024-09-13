@@ -14,6 +14,6 @@ import java.util.UUID;
 @Setter
 public class ResponseReservationDTO {
     private UUID id;
-    private LocalDateTime creationDate;
-    private LocalDateTime updateDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

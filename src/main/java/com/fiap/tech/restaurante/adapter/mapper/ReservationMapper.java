@@ -11,8 +11,8 @@ public class ReservationMapper {
     public Reservation toDomain(ReservationEntity entity) {
         return new Reservation(
                 entity.getId(),
-                entity.getCreationDate(),
-                entity.getUpdateDate()
+                entity.getCreatedAt(),
+                entity.getUpdatedAt()
         );
     }
 
@@ -24,7 +24,7 @@ public class ReservationMapper {
         );
     }
 
-public ResponseReservationDTO toDto(Reservation reservation){
+public ResponseReservationDTO toDTO(Reservation reservation){
         return  new ResponseReservationDTO(
                 reservation.getId(),
                 reservation.getCreationDate(),
