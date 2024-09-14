@@ -1,20 +1,14 @@
-package com.fiap.tech.restaurante.repository.entities;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.fiap.tech.restaurante.core.domain;
 
-import java.time.LocalTime;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class Restaurant {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String address;

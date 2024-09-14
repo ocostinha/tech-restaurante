@@ -30,4 +30,18 @@ public class RestaurantController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado.");
         }
     }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editRestaurant(@PathVariable Long id, @RequestBody RestaurantRequestDTO requestDTO) {
+        try {
+            RestaurantResponseDTO response = restaurantService.editRestaurant(id, requestDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (BusinessException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado.");
+        }
+    }
 }

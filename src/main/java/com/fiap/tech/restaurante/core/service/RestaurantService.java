@@ -1,13 +1,16 @@
 package com.fiap.tech.restaurante.core.service;
 import com.fiap.tech.restaurante.commoms.exception.BusinessException;
+import com.fiap.tech.restaurante.commoms.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.controller.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.controller.dto.RestaurantResponseDTO;
+import com.fiap.tech.restaurante.core.domain.Restaurant;
 import com.fiap.tech.restaurante.repository.RestaurantRepository;
-import com.fiap.tech.restaurante.repository.entities.Restaurant;
+import com.fiap.tech.restaurante.repository.entities.RestaurantEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
@@ -15,15 +18,23 @@ public class RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO requestDTO) throws Exception {
+    @Autowired
+    private RestaurantMapper mapper;
+
+    public Restaurant editRestaurant(Long id, RestaurantRequestDTO requestDTO) throws Exception {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(id);
+        if (optionalRestaurant.isEmpty()) {
+            throw new IllegalArgumentException("Restaurante não encontrado.");
+        }
+
         validateRequest(requestDTO);
         checkBusinessRules(requestDTO);
 
-        Restaurant restaurant = mapToEntity(requestDTO);
-        restaurant.setCreatedAt(LocalDateTime.now());
+        RestaurantEntity restaurant = optionalRestaurant.get();
+        mapper.update(requestDTO, restaurant);
         restaurant = restaurantRepository.save(restaurant);
 
-        return new RestaurantResponseDTO(restaurant.getId(), restaurant.getCreatedAt());
+        return mapper.toResponse(restaurant);
     }
 
     private void validateRequest(RestaurantRequestDTO requestDTO) throws Exception {
@@ -40,23 +51,6 @@ public class RestaurantService {
         if (restaurantRepository.findByName(requestDTO.name).isPresent()) {
             throw new BusinessException("Já existe um restaurante com esse nome na plataforma.");
         }
-    }
-
-    private Restaurant mapToEntity(RestaurantRequestDTO requestDTO) {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setName(requestDTO.name);
-        restaurant.setAddress(requestDTO.address);
-        restaurant.setNumber(requestDTO.number);
-        restaurant.setNeighborhood(requestDTO.neighborhood);
-        restaurant.setCity(requestDTO.city);
-        restaurant.setState(requestDTO.state);
-        restaurant.setType(requestDTO.type);
-        restaurant.setOpenAt(requestDTO.openAt);
-        restaurant.setCloseAt(requestDTO.closeAt);
-        restaurant.setIntervalStart(requestDTO.intervalStart);
-        restaurant.setIntervalFinish(requestDTO.intervalFinish);
-        restaurant.setNumberOfSeats(requestDTO.numberOfSeats);
-        return restaurant;
     }
 }
 
