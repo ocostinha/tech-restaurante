@@ -1,11 +1,10 @@
 package com.fiap.tech.restaurante.controller;
-import com.fiap.tech.restaurante.commoms.exception.BusinessException;
-import com.fiap.tech.restaurante.controller.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.controller.dto.RestaurantResponseDTO;
 import com.fiap.tech.restaurante.core.service.RestaurantService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -17,31 +16,15 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createRestaurant(@RequestBody RestaurantRequestDTO requestDTO) {
-        try {
-            RestaurantResponseDTO response = restaurantService.createRestaurant(requestDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BusinessException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado.");
-        }
-    }
+    @GetMapping("/find")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RestaurantResponseDTO> findRestaurants(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String neighborhood,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String type) {
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<?> editRestaurant(@PathVariable Long id, @RequestBody RestaurantRequestDTO requestDTO) {
-        try {
-            RestaurantResponseDTO response = restaurantService.editRestaurant(id, requestDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BusinessException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado.");
-        }
+        return restaurantService.findRestaurants(name, neighborhood, city, state, type);
     }
 }
