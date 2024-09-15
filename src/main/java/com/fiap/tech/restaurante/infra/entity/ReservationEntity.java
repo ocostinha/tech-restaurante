@@ -35,4 +35,15 @@ public class ReservationEntity {
 
     @Column(name = "id_restaurant", nullable = false)
     private Long idRestaurant;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
