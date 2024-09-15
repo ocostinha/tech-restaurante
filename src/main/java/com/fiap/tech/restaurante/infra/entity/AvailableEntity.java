@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.infrastructure.entity;
+package com.fiap.tech.restaurante.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "available")
@@ -19,24 +19,35 @@ import java.util.UUID;
 public class AvailableEntity {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "id_restaurant", nullable = false)
-    private UUID restaurantId;
+    private Long idRestaurant;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @Column(name = "hour", nullable = false)
-    private int hour;
+    private LocalTime hour;
 
     @Column(name = "available_seats", nullable = false)
     private int availableSeats;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

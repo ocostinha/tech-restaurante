@@ -1,12 +1,13 @@
-package com.fiap.tech.restaurante.addapter.controller;
+package com.fiap.tech.restaurante.application.controller;
 
-import com.fiap.tech.restaurante.addapter.dto.AvailableDTO;
-import com.fiap.tech.restaurante.addapter.mapper.AvailableMapper;
-import com.fiap.tech.restaurante.usecase.FindAvailabilityUseCase;
+import com.fiap.tech.restaurante.application.dto.AvailableResponseDTO;
+import com.fiap.tech.restaurante.domain.mappers.AvailableMapper;
+import com.fiap.tech.restaurante.domain.useCase.availability.FindAvailabilityUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +21,12 @@ public class AvailableController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<AvailableDTO> findAvailability(
+    public List<AvailableResponseDTO> findAvailability(
             @RequestParam(required = false) Integer seats,
-            @RequestParam(required = false) Integer hour) {
+            @RequestParam(required = false) LocalTime hour) {
 
-        return findAvailabilityUseCase.findAvailability(seats, hour).stream()
-                .map(mapper::toDTO)
+        return findAvailabilityUseCase.execute(seats, hour).stream()
+                .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 }

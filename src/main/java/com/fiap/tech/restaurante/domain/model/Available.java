@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.domain.entity;
+package com.fiap.tech.restaurante.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,24 +7,17 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Available {
-
-    private UUID id;
-    private UUID restaurantId;
+    private Long id;
+    private Long idRestaurant;
     private LocalDate date;
-    private int hour;
+    private LocalTime hour;
     private int availableSeats;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public void subtractSeats(int seats) {
-        this.availableSeats -= seats;
-        this.updatedAt = LocalDateTime.now();
-    }
-
 }

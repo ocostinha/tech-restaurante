@@ -27,6 +27,6 @@ public interface RestaurantMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "openAt", source = "openAt")
     @Mapping(target = "closeAt", source = "closeAt")
-    Restaurant update(Restaurant domain, @MappingTarget RestaurantEntity entity);
+    RestaurantEntity update(Restaurant domain, @MappingTarget RestaurantEntity entity);
 }
 
