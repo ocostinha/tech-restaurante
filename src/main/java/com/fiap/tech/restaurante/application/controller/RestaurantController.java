@@ -4,11 +4,14 @@ import com.fiap.tech.restaurante.application.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
 import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.CreateRestaurantUseCase;
+import com.fiap.tech.restaurante.domain.useCase.restaurant.FindRestaurantUseCase;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.UpdateRestaurantUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -17,6 +20,7 @@ public class RestaurantController {
 
     private final CreateRestaurantUseCase createRestaurantUseCase;
     private final UpdateRestaurantUseCase updateRestaurantUseCase;
+    private final FindRestaurantUseCase findRestaurantUseCase;
     private final RestaurantMapper mapper;
 
     @PostMapping("/create")
@@ -36,5 +40,18 @@ public class RestaurantController {
         return mapper.toResponse(
                 updateRestaurantUseCase.execute(id, mapper.toDomain(requestDTO))
         );
+    }
+
+    @GetMapping("/find")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RestaurantResponseDTO> findRestaurants(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String neighborhood,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String type) {
+
+        return findRestaurantUseCase.execute(name, neighborhood, city, state, type).stream()
+                .map(mapper::toResponse).toList();
     }
 }
