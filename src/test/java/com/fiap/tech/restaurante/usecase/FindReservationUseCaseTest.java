@@ -1,16 +1,18 @@
 package com.fiap.tech.restaurante.usecase;
 
-import com.fiap.tech.restaurante.domain.entity.Reservation;
-import com.fiap.tech.restaurante.domain.repository.ReservationRepository;
+import com.fiap.tech.restaurante.domain.model.Reservation;
+import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationUseCase;
 import com.fiap.tech.restaurante.exception.ReservationNotFoundException;
 import com.fiap.tech.restaurante.exception.UnprocessableEntityException;
+import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
+import com.fiap.tech.restaurante.infra.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.UUID;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,28 +25,28 @@ class FindReservationUseCaseTest {
     @InjectMocks
     private FindReservationUseCase findReservationUseCase;
 
-    private UUID validId;
-    private UUID invalidId;
-    private Reservation reservation;
+    private Long validId;
+    private Long invalidId;
+    private ReservationEntity reservation;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        validId = UUID.randomUUID();
-        invalidId = UUID.randomUUID();
-        reservation = new Reservation();
+        validId = 1L;
+        invalidId = 2L;
+        reservation = new ReservationEntity();
         reservation.setId(validId);
     }
 
     @Test
     void findReservation_ShouldReturnReservation_WhenValidIdIsGiven() {
-        when(repository.findReservationById(validId)).thenReturn(reservation);
+        when(repository.findById(validId)).thenReturn(Optional.of(reservation));
 
         Reservation foundReservation = findReservationUseCase.findReservation(validId);
 
         assertNotNull(foundReservation);
         assertEquals(validId, foundReservation.getId());
-        verify(repository, times(1)).findReservationById(validId);
+        verify(repository, times(1)).findById(validId);
     }
 
     @Test
@@ -53,17 +55,17 @@ class FindReservationUseCaseTest {
                 () -> findReservationUseCase.findReservation(null));
 
         assertEquals("O id da reserva não pode ser nulo", exception.getMessage());
-        verify(repository, never()).findReservationById(any());
+        verify(repository, never()).findById(any());
     }
 
     @Test
     void findReservation_ShouldThrowReservationNotFoundException_WhenReservationDoesNotExist() {
-        when(repository.findReservationById(invalidId)).thenReturn(null);
+        when(repository.findById(invalidId)).thenReturn(null);
 
         ReservationNotFoundException exception = assertThrows(ReservationNotFoundException.class,
                 () -> findReservationUseCase.findReservation(invalidId));
 
         assertEquals("A reserva não foi encontrada com o id: " + invalidId, exception.getMessage());
-        verify(repository, times(1)).findReservationById(invalidId);
+        verify(repository, times(1)).findById(invalidId);
     }
 }

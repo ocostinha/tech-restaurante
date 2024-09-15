@@ -6,6 +6,7 @@ import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.useCase.reservation.CancelReservationUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.CompleteReservationUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.CreateReservationUseCase;
+import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class ReservationController {
     private final CancelReservationUseCase cancelReservationUseCase;
     private final CompleteReservationUseCase completeReservationUseCase;
     private final CreateReservationUseCase createReservationUseCase;
+    private final FindReservationUseCase findReservationUseCase;
     private final ReservationMapper mapper;
 
     @PostMapping("/reserve_request")
@@ -29,6 +31,12 @@ public class ReservationController {
                         mapper.toDomain(reservationRequest)
                 )
         );
+    }
+
+    @GetMapping("/{id}/find")
+    @ResponseStatus(HttpStatus.OK)
+    public ReservationResponseDTO findReservationById(@PathVariable Long id) {
+        return  mapper.toResponseDTO(findReservationUseCase.findReservation(id));
     }
 
     @PutMapping("/{id}/complete")

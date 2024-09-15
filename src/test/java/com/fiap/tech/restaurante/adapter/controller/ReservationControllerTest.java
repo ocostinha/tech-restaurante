@@ -1,9 +1,10 @@
 package com.fiap.tech.restaurante.adapter.controller;
 
-import com.fiap.tech.restaurante.adapter.dto.ResponseReservationDTO;
-import com.fiap.tech.restaurante.adapter.mapper.ReservationMapper;
-import com.fiap.tech.restaurante.domain.entity.Reservation;
-import com.fiap.tech.restaurante.usecase.FindReservationUseCase;
+import com.fiap.tech.restaurante.application.controller.ReservationController;
+import com.fiap.tech.restaurante.application.dto.ReservationResponseDTO;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
+import com.fiap.tech.restaurante.domain.model.Reservation;
+import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,35 +27,35 @@ class ReservationControllerTest {
     @InjectMocks
     private ReservationController reservationController;
 
-    private UUID validId;
-    private UUID invalidId;
+    private Long validId;
+    private Long invalidId;
     private Reservation reservation;
-    private ResponseReservationDTO responseReservationDTO;
+    private ReservationResponseDTO responseReservationDTO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        validId = UUID.randomUUID();
-        invalidId = UUID.randomUUID();
+        validId = 1L;
+        invalidId = 2L;
 
         reservation = new Reservation();
         reservation.setId(validId);
 
-        responseReservationDTO = new ResponseReservationDTO();
+        responseReservationDTO = new ReservationResponseDTO();
         responseReservationDTO.setId(validId);
     }
 
     @Test
     void findReservationById_ShouldReturnResponseReservationDTO_WhenReservationExists() {
         when(findReservationUseCase.findReservation(validId)).thenReturn(reservation);
-        when(reservationMapper.toDTO(reservation)).thenReturn(responseReservationDTO);
+        when(reservationMapper.toResponseDTO(reservation)).thenReturn(responseReservationDTO);
 
-        ResponseReservationDTO result = reservationController.findReservationById(validId);
+        ReservationResponseDTO result = reservationController.findReservationById(validId);
 
         assertNotNull(result);
         assertEquals(validId, result.getId());
         verify(findReservationUseCase, times(1)).findReservation(validId);
-        verify(reservationMapper, times(1)).toDTO(reservation);
+        verify(reservationMapper, times(1)).toResponseDTO(reservation);
     }
 
     @Test
@@ -69,6 +68,6 @@ class ReservationControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         verify(findReservationUseCase, times(1)).findReservation(invalidId);
-        verify(reservationMapper, never()).toDTO(any());
+        verify(reservationMapper, never()).toResponseDTO(any());
     }
 }
