@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.dto;
+package com.fiap.tech.restaurante.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationResponse {
+public class ReservationResponseDTO {
     private Long id;
+    private String status;
+    private Integer seatsReserved;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

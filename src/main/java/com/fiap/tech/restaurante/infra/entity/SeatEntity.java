@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.model;
+package com.fiap.tech.restaurante.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Seat {
+public class SeatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "id_restaurant", nullable = false)
+    private Long idRestaurant;
 
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;

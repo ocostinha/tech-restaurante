@@ -1,10 +1,12 @@
-package com.fiap.tech.restaurante.model;
+package com.fiap.tech.restaurante.infra.entity;
 
+import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Reservation {
+public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,4 +33,6 @@ public class Reservation {
     @Column(name = "seats_reserved", nullable = false)
     private Integer seatsReserved;
 
+    @Column(name = "id_restaurant", nullable = false)
+    private Long idRestaurant;
 }

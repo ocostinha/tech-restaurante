@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.model;
+package com.fiap.tech.restaurante.domain.enums;
 
 public enum ReservationStatus {
     PENDING,
