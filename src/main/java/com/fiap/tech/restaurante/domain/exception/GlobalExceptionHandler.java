@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.exception;
+package com.fiap.tech.restaurante.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
