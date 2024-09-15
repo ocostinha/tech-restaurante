@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "reservations")
@@ -20,21 +22,33 @@ public class ReservationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "id_restaurant", nullable = false)
+    private Long idRestaurant;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "reservation_owner_name", nullable = false)
+    private String reservationOwnerName;
+
+    @Column(name = "reservation_owner_email", nullable = false)
+    private String reservationOwnerEmail;
+
+    @Column(name = "reservation_data", nullable = false)
+    private LocalDate reservationDate;
+
+    @Column(name = "reservation_hour", nullable = false)
+    private LocalTime reservationHour;
+
+    @Column(name = "seats_reserved", nullable = false)
+    private Integer seatsReserved;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ReservationStatus status;
 
-    @Column(name = "seats_reserved", nullable = false)
-    private Integer seatsReserved;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "id_restaurant", nullable = false)
-    private Long idRestaurant;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {

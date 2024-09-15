@@ -21,7 +21,7 @@ public class CancelReservationUseCase {
 
     public Reservation execute(Long reservationId) {
         ReservationEntity reservationEntity = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         reservationEntity.setStatus(ReservationStatus.CANCELED);
         Reservation updatedReservation = mapper.toDomain(reservationRepository.save(reservationEntity));

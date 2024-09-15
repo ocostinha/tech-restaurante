@@ -1,12 +1,14 @@
-package com.fiap.tech.restaurante.dto;
+package com.fiap.tech.restaurante.application.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
-public class ReservationRequestDto {
+public class ReservationRequestDTO {
 
     @NotNull
     private UUID idRestaurant;
@@ -23,9 +25,8 @@ public class ReservationRequestDto {
     @NotNull
     private LocalDate reservationDate;
 
-    @Min(0)
-    @Max(23)
-    private int reservationHour;
+    @NotNull
+    private LocalTime reservationHour;
 
     @Min(1)
     private int numberOfSeats;

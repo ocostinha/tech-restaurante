@@ -18,7 +18,7 @@ public class CompleteReservationUseCase {
 
     public Reservation execute(Long id) {
         ReservationEntity reservationEntity = reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         reservationEntity.setStatus(ReservationStatus.COMPLETED);
 
