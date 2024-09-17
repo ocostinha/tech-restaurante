@@ -2,11 +2,15 @@ package com.fiap.tech.restaurante.infra.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Builder
 @Entity
 @Data
 @Table(name = "restaurants")

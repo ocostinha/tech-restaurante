@@ -1,5 +1,6 @@
 package com.fiap.tech.restaurante.domain.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@Builder
 public class Restaurant {
     private Long id;
     private String name;
