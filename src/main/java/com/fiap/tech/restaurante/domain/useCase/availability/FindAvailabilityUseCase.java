@@ -20,7 +20,7 @@ public class FindAvailabilityUseCase {
         if (seats == null && hour == null) {
             return availableRepository.findByIdRestaurant(idRestaurant).stream().map(mapper::toDomain).toList();
         } else if (seats != null && hour != null) {
-            return availableRepository.findByAvailableSeatsAndHour(seats, hour, idRestaurant).stream().map(mapper::toDomain).toList();
+            return availableRepository.findByAvailableSeatsGreaterThanEqualAndHourAndIdRestaurant(seats, hour, idRestaurant).stream().map(mapper::toDomain).toList();
         } else if (seats != null) {
             return availableRepository.findByAvailableSeatsGreaterThanEqualAndIdRestaurant(seats, idRestaurant).stream().map(mapper::toDomain).toList();
         }

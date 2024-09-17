@@ -1,9 +1,9 @@
 package com.fiap.tech.restaurante.application.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -30,16 +30,20 @@ public class RestaurantRequestDTO {
     public String cuisineType;
 
     @NotNull
-    public LocalTime openAt;
+    @JsonFormat(pattern = "HH:mm")
+    public String openAt;
 
     @NotNull
-    public LocalTime closeAt;
+    @JsonFormat(pattern = "HH:mm")
+    public String closeAt;
 
     @NotNull
-    public LocalTime intervalStart;
+    @JsonFormat(pattern = "HH:mm")
+    public String intervalStart;
 
     @NotNull
-    public LocalTime intervalFinish;
+    @JsonFormat(pattern = "HH:mm")
+    public String intervalFinish;
 
     @NotNull
     public int numberOfSeats;

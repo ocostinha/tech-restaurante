@@ -19,7 +19,7 @@ public class CreateAvailabilityUseCase {
 
     public void execute() {
         List<RestaurantEntity> restaurants = restaurantRepository.findAll();
-        LocalDate currentDate = LocalDate.now();
+        LocalDate reservationDate = LocalDate.now().plusDays(1);
 
         for (RestaurantEntity restaurant : restaurants) {
             int totalSeats = restaurant.getNumberOfSeats();
@@ -29,12 +29,12 @@ public class CreateAvailabilityUseCase {
             LocalTime closingTime = restaurant.getCloseAt();
 
             for (LocalTime time = openingTime; time.isBefore(closingTime); time = time.plusHours(1)) {
-                if (closingTime.isBefore(restaurant.getIntervalStart()) ||
-                        closingTime.isAfter(restaurant.getIntervalFinish())){
+                if (time.isBefore(restaurant.getIntervalStart()) ||
+                        time.isAfter(restaurant.getIntervalFinish().minusHours(1))){
                     AvailableEntity availableEntity = new AvailableEntity();
 
                     availableEntity.setIdRestaurant(restaurant.getId());
-                    availableEntity.setDate(currentDate);
+                    availableEntity.setDate(reservationDate);
                     availableEntity.setHour(time);
                     availableEntity.setAvailableSeats(initialAvailability);
 

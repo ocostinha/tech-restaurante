@@ -14,6 +14,8 @@ import java.time.LocalTime;
 @Entity
 @Data
 @Table(name = "restaurants")
+@AllArgsConstructor
+@NoArgsConstructor
 public class RestaurantEntity {
 
     @Id

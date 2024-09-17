@@ -4,10 +4,7 @@ import com.fiap.tech.restaurante.application.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
 import com.fiap.tech.restaurante.domain.exception.ErrorDetails;
 import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
-import com.fiap.tech.restaurante.domain.useCase.restaurant.CreateRestaurantUseCase;
-import com.fiap.tech.restaurante.domain.useCase.restaurant.FindRestaurantByIdUseCase;
-import com.fiap.tech.restaurante.domain.useCase.restaurant.FindRestaurantUseCase;
-import com.fiap.tech.restaurante.domain.useCase.restaurant.UpdateRestaurantUseCase;
+import com.fiap.tech.restaurante.domain.useCase.restaurant.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +26,7 @@ public class RestaurantController {
     private final UpdateRestaurantUseCase updateRestaurantUseCase;
     private final FindRestaurantUseCase findRestaurantUseCase;
     private final FindRestaurantByIdUseCase findRestaurantByIdUseCase;
+    private final DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
     private final RestaurantMapper mapper;
 
     @Operation(summary = "Cadastrar restaurante")
@@ -85,15 +83,15 @@ public class RestaurantController {
             @RequestParam(required = false) String neighborhood,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String state,
-            @RequestParam(required = false) String type) {
+            @RequestParam(required = false) String cuisineType) {
 
-        return findRestaurantUseCase.execute(name, neighborhood, city, state, type).stream()
+        return findRestaurantUseCase.execute(name, neighborhood, city, state, cuisineType).stream()
                 .map(mapper::toResponse).toList();
     }
 
-    @Operation(summary = "Consultar restaurantes")
+    @Operation(summary = "Consultar restaurante")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Restaurante localizados",
+            @ApiResponse(responseCode = "200", description = "Restaurante solicitado",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
             @ApiResponse(responseCode = "204", description = "Não existem restaurantes cadastrados")
@@ -104,5 +102,16 @@ public class RestaurantController {
         return mapper.toResponse(
                 findRestaurantByIdUseCase.execute(id)
         );
+    }
+
+    @Operation(summary = "Deletar restaurante")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Restaurante deletado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Erro na regra de negócio")
+    })
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteRestaurant(@PathVariable Long id) {
+        deleteRestaurantByIdUseCase.execute(id);
     }
 }

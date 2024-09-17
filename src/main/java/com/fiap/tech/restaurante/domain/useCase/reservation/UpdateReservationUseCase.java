@@ -40,7 +40,12 @@ public class UpdateReservationUseCase {
             throw new UnprocessableEntityException("Não há assentos suficientes disponíveis");
         }
 
-        updateAvailableUseCase.execute(reservation.getIdRestaurant(), (reservationUpdateRequest.getSeatsReserved() * -1));
+        updateAvailableUseCase.execute(
+                reservation.getIdRestaurant(),
+                (reservationUpdateRequest.getSeatsReserved() * -1),
+                reservation.getReservationDate(),
+                reservation.getReservationHour()
+        );
 
         return mapper.toDomain(
                 reservationRepository.save(mapper.update(reservationUpdateRequest, reservation))

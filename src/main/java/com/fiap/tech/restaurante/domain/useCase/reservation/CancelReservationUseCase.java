@@ -26,7 +26,12 @@ public class CancelReservationUseCase {
         reservationEntity.setStatus(ReservationStatus.CANCELED);
         Reservation updatedReservation = mapper.toDomain(reservationRepository.save(reservationEntity));
 
-        updateAvailableUseCase.execute(reservationEntity.getIdRestaurant(), reservationEntity.getSeatsReserved());
+        updateAvailableUseCase.execute(
+                reservationEntity.getIdRestaurant(),
+                reservationEntity.getSeatsReserved(),
+                reservationEntity.getReservationDate(),
+                reservationEntity.getReservationHour()
+        );
 
         return updatedReservation;
     }

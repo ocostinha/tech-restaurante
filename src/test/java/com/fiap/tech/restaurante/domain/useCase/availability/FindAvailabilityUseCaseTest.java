@@ -51,12 +51,12 @@ class FindAvailabilityUseCaseTest {
     void shouldFindAvailabilityBySeatsAndHour() {
         List<AvailableEntity> availabilityBySeatsAndHour = new ArrayList<>();
         availabilityBySeatsAndHour.add(available);
-        when(availableRepository.findByAvailableSeatsAndHour(anyInt(), any(), any())).thenReturn(availabilityBySeatsAndHour);
+        when(availableRepository.findByAvailableSeatsGreaterThanEqualAndHourAndIdRestaurant(anyInt(), any(), any())).thenReturn(availabilityBySeatsAndHour);
 
         List<Available> result = findAvailabilityUseCase.execute(5, LocalTime.of(12, 0), 1L);
 
         assertFalse(result.isEmpty());
-        verify(availableRepository).findByAvailableSeatsAndHour(anyInt(), any(), 1L);
+        verify(availableRepository).findByAvailableSeatsGreaterThanEqualAndHourAndIdRestaurant(anyInt(), any(), 1L);
     }
 
     @Test

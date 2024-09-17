@@ -41,7 +41,12 @@ public class CreateReservationUseCase {
                 )
         );
 
-        updateAvailableUseCase.execute(reservation.getIdRestaurant(), (reservation.getSeatsReserved() * -1));
+        updateAvailableUseCase.execute(
+                reservation.getIdRestaurant(),
+                (reservation.getSeatsReserved() * -1),
+                reservation.getReservationDate(),
+                reservation.getReservationHour()
+        );
 
         return reservation;
     }

@@ -5,7 +5,6 @@ import com.fiap.tech.restaurante.domain.model.Restaurant;
 import com.fiap.tech.restaurante.infra.entity.RestaurantEntity;
 import com.fiap.tech.restaurante.infra.repository.RestaurantRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class FindRestaurantUseCase {
     private RestaurantRepository restaurantRepository;
     private RestaurantMapper mapper;
 
-    public List<Restaurant> execute(String name, String neighborhood, String city, String state, String type) {
+    public List<Restaurant> execute(String name, String neighborhood, String city, String state, String cuisineType) {
         Specification<RestaurantEntity> spec = Specification.where(null);
 
         if (name != null) {
@@ -33,11 +32,11 @@ public class FindRestaurantUseCase {
         if (state != null) {
             spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("state"), state));
         }
-        if (type != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cuisineType"), "%" + type + "%"));
+        if (cuisineType != null) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cuisineType"), "%" + cuisineType + "%"));
         }
 
-        List<RestaurantEntity> restaurants = restaurantRepository.findAll((Sort) spec);
+        List<RestaurantEntity> restaurants = restaurantRepository.findAll(spec);
         return restaurants.stream().map(mapper::toDomain).toList();
     }
 }
