@@ -1,6 +1,5 @@
 package com.fiap.tech.restaurante.domain.useCase.restaurant;
 
-import com.fiap.tech.restaurante.domain.exception.BusinessException;
 import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.domain.model.Restaurant;
 import com.fiap.tech.restaurante.infra.entity.RestaurantEntity;
@@ -8,9 +7,7 @@ import com.fiap.tech.restaurante.infra.repository.RestaurantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
