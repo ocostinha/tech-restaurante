@@ -1,5 +1,7 @@
 package com.fiap.tech.restaurante.domain.useCase.reservation;
 
+import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
+import com.fiap.tech.restaurante.domain.exception.BusinessException;
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.model.Available;
@@ -23,6 +25,10 @@ public class UpdateReservationUseCase {
     public Reservation execute(Long reservationId, Reservation reservationUpdateRequest) {
         ReservationEntity reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new UnprocessableEntityException("Reserva não encontrada"));
+
+        if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
+            throw new BusinessException("Reservas finalizadas ou canceladas não podem ser alteradas.");
+        }
 
         Available availability = findAvailabilityByDataAndHourUseCase.execute(
                 reservationUpdateRequest.getIdRestaurant(),

@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import static com.fiap.tech.restaurante.domain.mappers.utils.MappingUtils.PENDING_STATUS;
+import static com.fiap.tech.restaurante.domain.mappers.utils.MappingUtils.RESERVATION_STATUS_CONFIRMED;
 
 @Mapper(componentModel = "spring")
 public interface ReservationMapper {
@@ -19,7 +19,7 @@ public interface ReservationMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "status", expression = PENDING_STATUS)
+    @Mapping(target = "status", expression = RESERVATION_STATUS_CONFIRMED)
     Reservation toDomain (ReservationRequestDTO dto);
 
     ReservationEntity toEntity (Reservation domain);

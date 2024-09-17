@@ -41,7 +41,7 @@ class FindAvailabilityUseCaseTest {
         allAvailability.add(available);
         when(availableRepository.findAll()).thenReturn(allAvailability);
 
-        List<Available> result = findAvailabilityUseCase.execute(null, null);
+        List<Available> result = findAvailabilityUseCase.execute(null, null, 1L);
 
         assertFalse(result.isEmpty());
         verify(availableRepository).findAll();
@@ -51,35 +51,35 @@ class FindAvailabilityUseCaseTest {
     void shouldFindAvailabilityBySeatsAndHour() {
         List<AvailableEntity> availabilityBySeatsAndHour = new ArrayList<>();
         availabilityBySeatsAndHour.add(available);
-        when(availableRepository.findByAvailableSeatsAndHour(anyInt(), any())).thenReturn(availabilityBySeatsAndHour);
+        when(availableRepository.findByAvailableSeatsAndHour(anyInt(), any(), any())).thenReturn(availabilityBySeatsAndHour);
 
-        List<Available> result = findAvailabilityUseCase.execute(5, LocalTime.of(12, 0));
+        List<Available> result = findAvailabilityUseCase.execute(5, LocalTime.of(12, 0), 1L);
 
         assertFalse(result.isEmpty());
-        verify(availableRepository).findByAvailableSeatsAndHour(anyInt(), any());
+        verify(availableRepository).findByAvailableSeatsAndHour(anyInt(), any(), 1L);
     }
 
     @Test
     void shouldFindAvailabilityBySeats() {
         List<AvailableEntity> availabilityBySeats = new ArrayList<>();
         availabilityBySeats.add(available);
-        when(availableRepository.findByAvailableSeatsGreaterThanEqual(anyInt())).thenReturn(availabilityBySeats);
+        when(availableRepository.findByAvailableSeatsGreaterThanEqualAndIdRestaurant(anyInt(),1L )).thenReturn(availabilityBySeats);
 
-        List<Available> result = findAvailabilityUseCase.execute(5, null);
+        List<Available> result = findAvailabilityUseCase.execute(5, null, 1L);
 
         assertFalse(result.isEmpty());
-        verify(availableRepository).findByAvailableSeatsGreaterThanEqual(anyInt());
+        verify(availableRepository).findByAvailableSeatsGreaterThanEqualAndIdRestaurant(anyInt(), 1L);
     }
 
     @Test
     void shouldFindAvailabilityByHour() {
         List<AvailableEntity> availabilityByHour = new ArrayList<>();
         availabilityByHour.add(available);
-        when(availableRepository.findByHour(any())).thenReturn(availabilityByHour);
+        when(availableRepository.findByHourAndIdRestaurant(any(), 1L)).thenReturn(availabilityByHour);
 
-        List<Available> result = findAvailabilityUseCase.execute(null, LocalTime.of(12,0));
+        List<Available> result = findAvailabilityUseCase.execute(null, LocalTime.of(12,0), 1L);
 
         assertFalse(result.isEmpty());
-        verify(availableRepository).findByHour(any());
+        verify(availableRepository).findByHourAndIdRestaurant(any(), 1L);
     }
 }

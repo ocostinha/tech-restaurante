@@ -15,12 +15,12 @@ import java.util.UUID;
 public interface AvailableRepository extends JpaRepository<AvailableEntity, UUID> {
     Optional<AvailableEntity> findByIdRestaurantAndDateAndHour(Long restaurantId, LocalDate date, LocalTime hour);
 
-    @Query("from AvailableEntity where availableSeats >= :seats and hour = :hour")
-    List<AvailableEntity> findByAvailableSeatsAndHour(int seats, LocalTime hour);
+    @Query("from AvailableEntity where availableSeats >= :seats and hour = :hour and idRestaurant =: idRestaurant")
+    List<AvailableEntity> findByAvailableSeatsAndHour(int seats, LocalTime hour, Long idRestaurant);
 
-    List<AvailableEntity> findByAvailableSeatsGreaterThanEqual(int seats);
+    List<AvailableEntity> findByAvailableSeatsGreaterThanEqualAndIdRestaurant(int seats, Long idRestaurant);
 
-    List<AvailableEntity> findByHour(LocalTime hour);
+    List<AvailableEntity> findByHourAndIdRestaurant(LocalTime hour, Long idRestaurant);
 
     Optional<AvailableEntity> findByIdRestaurant(Long idRestaurant);
 }

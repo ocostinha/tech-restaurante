@@ -2,10 +2,17 @@ package com.fiap.tech.restaurante.application.controller;
 
 import com.fiap.tech.restaurante.application.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
+import com.fiap.tech.restaurante.domain.exception.ErrorDetails;
 import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.CreateRestaurantUseCase;
+import com.fiap.tech.restaurante.domain.useCase.restaurant.FindRestaurantByIdUseCase;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.FindRestaurantUseCase;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.UpdateRestaurantUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,8 +28,18 @@ public class RestaurantController {
     private final CreateRestaurantUseCase createRestaurantUseCase;
     private final UpdateRestaurantUseCase updateRestaurantUseCase;
     private final FindRestaurantUseCase findRestaurantUseCase;
+    private final FindRestaurantByIdUseCase findRestaurantByIdUseCase;
     private final RestaurantMapper mapper;
 
+    @Operation(summary = "Cadastrar restaurante")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Restaurante cadastrado com sucesso",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponseDTO createRestaurant(@Valid @RequestBody RestaurantRequestDTO requestDTO) {
@@ -31,6 +48,18 @@ public class RestaurantController {
         );
     }
 
+    @Operation(summary = "Atualizar restaurante")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Restaurante atualizado com sucesso",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "422", description = "Erro na regra de negócio",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
     @PutMapping("/edit/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RestaurantResponseDTO editRestaurant(
@@ -42,7 +71,14 @@ public class RestaurantController {
         );
     }
 
-    @GetMapping("/find")
+    @Operation(summary = "Consultar restaurantes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Restaurante localizados",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+            @ApiResponse(responseCode = "204", description = "Não existem restaurantes cadastrados")
+    })
+    @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
     public List<RestaurantResponseDTO> findRestaurants(
             @RequestParam(required = false) String name,
@@ -53,5 +89,20 @@ public class RestaurantController {
 
         return findRestaurantUseCase.execute(name, neighborhood, city, state, type).stream()
                 .map(mapper::toResponse).toList();
+    }
+
+    @Operation(summary = "Consultar restaurantes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Restaurante localizados",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+            @ApiResponse(responseCode = "204", description = "Não existem restaurantes cadastrados")
+    })
+    @GetMapping("/get/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestaurantResponseDTO getRestaurant(@PathVariable Long id) {
+        return mapper.toResponse(
+                findRestaurantByIdUseCase.execute(id)
+        );
     }
 }

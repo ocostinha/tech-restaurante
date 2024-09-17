@@ -5,9 +5,7 @@ import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.domain.model.Restaurant;
 import com.fiap.tech.restaurante.infra.repository.RestaurantRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +22,7 @@ public class UpdateRestaurantUseCase {
                         mapper.update(
                                 restaurant,
                                 restaurantRepository.findById(idRestaurant)
-                                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurante não encontrado"))
+                                        .orElseThrow(() -> new BusinessException("Restaurante não encontrado"))
                 )
         )
         );

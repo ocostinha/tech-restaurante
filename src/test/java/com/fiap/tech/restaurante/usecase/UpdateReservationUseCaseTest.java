@@ -52,7 +52,7 @@ class UpdateReservationUseCaseTest {
                 LocalDate.now(),
                 LocalTime.of(12, 0),
                 5,
-                ReservationStatus.PENDING,
+                ReservationStatus.CONFIRMED,
                 null,
                 null
         );
@@ -65,7 +65,7 @@ class UpdateReservationUseCaseTest {
                 LocalDate.now(),
                 LocalTime.of(12, 0),
                 5,
-                ReservationStatus.PENDING,
+                ReservationStatus.CONFIRMED,
                 null,
                 null
         );

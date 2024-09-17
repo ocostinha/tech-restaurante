@@ -2,8 +2,14 @@ package com.fiap.tech.restaurante.application.controller;
 
 import com.fiap.tech.restaurante.application.dto.ReservationRequestDTO;
 import com.fiap.tech.restaurante.application.dto.ReservationResponseDTO;
+import com.fiap.tech.restaurante.domain.exception.ErrorDetails;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.useCase.reservation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,10 +23,22 @@ public class ReservationController {
     private final CancelReservationUseCase cancelReservationUseCase;
     private final CompleteReservationUseCase completeReservationUseCase;
     private final CreateReservationUseCase createReservationUseCase;
-    private final FindReservationUseCase findReservationUseCase;
+    private final FindReservationByIdUseCase findReservationByIdUseCase;
     private final UpdateReservationUseCase updateReservationUseCase;
     private final ReservationMapper mapper;
 
+    @Operation(summary = "Realizar reserva")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Reserva realizada com sucesso",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReservationResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "422", description = "Erro de regra de negócio",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
     @PostMapping("/reserve_request")
     @ResponseStatus(HttpStatus.CREATED)
     public ReservationResponseDTO createReservation(@RequestBody @Valid ReservationRequestDTO reservationRequest) {
@@ -31,12 +49,33 @@ public class ReservationController {
         );
     }
 
-    @GetMapping("/{id}/find")
+    @Operation(summary = "Obter reserva")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reserva solicitada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReservationResponseDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Reserva não localizada",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
+    @GetMapping("/get/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ReservationResponseDTO findReservationById(@PathVariable Long id) {
-        return  mapper.toResponseDTO(findReservationUseCase.findReservation(id));
+        return  mapper.toResponseDTO(findReservationByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Atualizar reserva")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Reserva atualizada com sucesso",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReservationResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class))),
+            @ApiResponse(responseCode = "422", description = "Erro de regra de negócio",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ReservationResponseDTO updateReservation(
@@ -47,6 +86,15 @@ public class ReservationController {
         );
     }
 
+    @Operation(summary = "Concluir reserva")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Reserva concluida com sucesso",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReservationResponseDTO.class)) }),
+            @ApiResponse(responseCode = "422", description = "Erro de regra de negócio",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDetails.class)))
+    })
     @PutMapping("/{id}/complete")
     @ResponseStatus(HttpStatus.OK)
     public ReservationResponseDTO completeReservation(@PathVariable Long id) {

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class FindReservationUseCase {
+public class FindReservationByIdUseCase {
 
     private final ReservationRepository repository;
     private final ReservationMapper mapper;
 
-    public Reservation findReservation(Long id) {
+    public Reservation execute(Long id) {
         validateReservationId(id);
         return mapper.toDomain(
                 repository.findById(id)

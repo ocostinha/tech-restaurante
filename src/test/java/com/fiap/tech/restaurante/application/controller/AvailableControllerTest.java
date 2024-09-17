@@ -44,13 +44,13 @@ class AvailableControllerTest {
     void shouldReturnAvailabilityWhenSeatsAndHourAreNull() {
         List<Available> availableList = new ArrayList<>();
         availableList.add(available);
-        when(findAvailabilityUseCase.execute(null, null)).thenReturn(availableList);
+        when(findAvailabilityUseCase.execute(null, null, 1L)).thenReturn(availableList);
         when(availableMapper.toResponseDTO(any(Available.class))).thenReturn(availableResponseDTO);
 
-        List<AvailableResponseDTO> result = availableController.findAvailability(null, null);
+        List<AvailableResponseDTO> result = availableController.findAvailability(null, null, 1L);
 
         assertFalse(result.isEmpty());
-        verify(findAvailabilityUseCase).execute(null, null);
+        verify(findAvailabilityUseCase).execute(null, null, 1L);
         verify(availableMapper, times(1)).toResponseDTO(any(Available.class));
     }
 
@@ -58,13 +58,13 @@ class AvailableControllerTest {
     void shouldReturnAvailabilityBySeatsAndHour() {
         List<Available> availableList = new ArrayList<>();
         availableList.add(available);
-        when(findAvailabilityUseCase.execute(5, LocalTime.of(12, 0))).thenReturn(availableList);
+        when(findAvailabilityUseCase.execute(5, LocalTime.of(12, 0), 1L)).thenReturn(availableList);
         when(availableMapper.toResponseDTO(any(Available.class))).thenReturn(availableResponseDTO);
 
-        List<AvailableResponseDTO> result = availableController.findAvailability(5, LocalTime.of(12, 0));
+        List<AvailableResponseDTO> result = availableController.findAvailability(5, LocalTime.of(12, 0), 1L);
 
         assertFalse(result.isEmpty());
-        verify(findAvailabilityUseCase).execute(5, LocalTime.of(12, 0));
+        verify(findAvailabilityUseCase).execute(5, LocalTime.of(12, 0), 1L);
         verify(availableMapper, times(1)).toResponseDTO(any(Available.class));
     }
 
@@ -72,13 +72,13 @@ class AvailableControllerTest {
     void shouldReturnAvailabilityBySeats() {
         List<Available> availableList = new ArrayList<>();
         availableList.add(available);
-        when(findAvailabilityUseCase.execute(5, null)).thenReturn(availableList);
+        when(findAvailabilityUseCase.execute(5, null, 1L)).thenReturn(availableList);
         when(availableMapper.toResponseDTO(any(Available.class))).thenReturn(availableResponseDTO);
 
-        List<AvailableResponseDTO> result = availableController.findAvailability(5, null);
+        List<AvailableResponseDTO> result = availableController.findAvailability(5, null, 1L);
 
         assertFalse(result.isEmpty());
-        verify(findAvailabilityUseCase).execute(5, null);
+        verify(findAvailabilityUseCase).execute(5, null, 1L);
         verify(availableMapper, times(1)).toResponseDTO(any(Available.class));
     }
 
@@ -86,13 +86,13 @@ class AvailableControllerTest {
     void shouldReturnAvailabilityByHour() {
         List<Available> availableList = new ArrayList<>();
         availableList.add(available);
-        when(findAvailabilityUseCase.execute(null, LocalTime.of(12, 0))).thenReturn(availableList);
+        when(findAvailabilityUseCase.execute(null, LocalTime.of(12, 0), 1L)).thenReturn(availableList);
         when(availableMapper.toResponseDTO(any(Available.class))).thenReturn(availableResponseDTO);
 
-        List<AvailableResponseDTO> result = availableController.findAvailability(null, LocalTime.of(12, 0));
+        List<AvailableResponseDTO> result = availableController.findAvailability(null, LocalTime.of(12, 0), 1L);
 
         assertFalse(result.isEmpty());
-        verify(findAvailabilityUseCase).execute(null, LocalTime.of(12, 0));
+        verify(findAvailabilityUseCase).execute(null, LocalTime.of(12, 0), 1L);
         verify(availableMapper, times(1)).toResponseDTO(any(Available.class));
     }
 }

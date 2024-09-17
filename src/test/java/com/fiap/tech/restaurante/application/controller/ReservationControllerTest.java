@@ -5,7 +5,7 @@ import com.fiap.tech.restaurante.application.dto.ReservationResponseDTO;
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.model.Reservation;
-import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationUseCase;
+import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationByIdUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.UpdateReservationUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class ReservationControllerTest {
     private ReservationMapper reservationMapper;
 
     @Mock
-    private FindReservationUseCase findReservationUseCase;
+    private FindReservationByIdUseCase findReservationByIdUseCase;
 
     private Reservation reservation;
     private ReservationResponseDTO responseReservationDTO;
@@ -51,7 +51,7 @@ class ReservationControllerTest {
         LocalDate reservationDate = LocalDate.now();
         LocalTime reservationHour = LocalTime.of(12, 0);
         int numberOfSeats = 5;
-        ReservationStatus status = ReservationStatus.PENDING;
+        ReservationStatus status = ReservationStatus.CONFIRMED;
 
 
         requestReservationDTO = new ReservationRequestDTO(restaurantId, ownerName, ownerEmail, reservationDate, reservationHour, numberOfSeats);
@@ -71,7 +71,7 @@ class ReservationControllerTest {
 
         responseReservationDTO = new ReservationResponseDTO(
                 reservationId,
-                ReservationStatus.PENDING.name(),
+                ReservationStatus.CONFIRMED.name(),
                 5,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -101,27 +101,25 @@ class ReservationControllerTest {
 
     @Test
     void findReservationById_ShouldReturnResponseReservationDTO_WhenReservationExists() {
-        when(findReservationUseCase.findReservation(1L)).thenReturn(reservation);
+        when(findReservationByIdUseCase.execute(1L)).thenReturn(reservation);
         when(reservationMapper.toResponseDTO(reservation)).thenReturn(responseReservationDTO);
 
         ReservationResponseDTO result = reservationController.findReservationById(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        verify(findReservationUseCase, times(1)).findReservation(1L);
+        verify(findReservationByIdUseCase, times(1)).execute(1L);
         verify(reservationMapper, times(1)).toResponseDTO(reservation);
     }
 
     @Test
     void findReservationById_ShouldThrowResponseStatusException_WhenReservationDoesNotExist() {
-        when(findReservationUseCase.findReservation(2L)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+        when(findReservationByIdUseCase.execute(2L)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            reservationController.findReservationById(2L);
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> reservationController.findReservationById(2L));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        verify(findReservationUseCase, times(1)).findReservation(2L);
+        verify(findReservationByIdUseCase, times(1)).execute(2L);
         verify(reservationMapper, never()).toResponseDTO(any());
     }
 }
