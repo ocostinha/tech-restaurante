@@ -24,6 +24,10 @@ public class CreateEvaluationUseCase {
             throw new BusinessException("Apenas reservas que foram completas podem ser avaliadas");
         }
 
+        if (repository.findByIdReserve(evaluation.getIdReserve()).isPresent()) {
+            throw new BusinessException("Apenas uma avaliação pode ser realizada para esta reserva");
+        }
+
         return mapper.toDomain(
                 repository.save(
                         mapper.toEntity(evaluation)

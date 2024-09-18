@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class EvaluationResponseDTO {
     private Long id;
     private Long idRestaurant;
-    private UUID idReserve;
+    private Long idReserve;
     private String evaluation;
     private int grade;
 

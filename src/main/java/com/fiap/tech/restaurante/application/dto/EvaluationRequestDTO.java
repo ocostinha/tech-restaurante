@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @Getter
 @Setter
@@ -21,7 +19,7 @@ public class EvaluationRequestDTO {
     private Long idRestaurant;
 
     @NotNull
-    private UUID idReserve;
+    private Long idReserve;
 
     @NotBlank
     private String evaluation;

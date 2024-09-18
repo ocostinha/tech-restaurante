@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+@Entity
+@Table(name = "evaluations")
 @AllArgsConstructor
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class EvaluationEntity {
     private Long idRestaurant;
 
     @Column(name = "id_reserve", nullable = false)
-    private UUID idReserve;
+    private Long idReserve;
 
     @Column(name = "evaluation", nullable = false)
     private String evaluation;

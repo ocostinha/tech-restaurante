@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/evaluation")
@@ -61,7 +60,7 @@ public class EvaluationController {
     @ResponseStatus(HttpStatus.OK)
     public List<EvaluationResponseDTO> findReservations(
             @RequestParam(required = false) Long idRestaurant,
-            @RequestParam(required = false) UUID idReserve
+            @RequestParam(required = false) Long idReserve
     ) {
         return findEvaluationUseCase.execute(
                 idRestaurant,
