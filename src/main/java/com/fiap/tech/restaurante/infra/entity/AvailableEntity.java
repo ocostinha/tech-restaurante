@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "available")
+@Table(name = "availables")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -25,10 +25,10 @@ public class AvailableEntity {
     @Column(name = "id_restaurant", nullable = false)
     private Long idRestaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "available_date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "hour", nullable = false)
+    @Column(name = "available_hour", nullable = false)
     private LocalTime hour;
 
     @Column(name = "available_seats", nullable = false)

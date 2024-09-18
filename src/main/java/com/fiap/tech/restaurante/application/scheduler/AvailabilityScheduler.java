@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.scheduler;
+package com.fiap.tech.restaurante.application.scheduler;
 
 import com.fiap.tech.restaurante.domain.useCase.availability.CreateAvailabilityUseCase;
 import lombok.AllArgsConstructor;

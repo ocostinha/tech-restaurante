@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "362b3e78-ce45-451b-9e63-319fcf1f6fee",
+		"name": "PosTech - Restaurant",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7521044",
+		"_collection_link": "https://dark-sunset-907085.postman.co/workspace/PosTech~fcc103fa-9367-4da2-9885-c9c6b1ebcc5d/collection/7521044-362b3e78-ce45-451b-9e63-319fcf1f6fee?action=share&source=collection_link&creator=7521044"
+	},
+	"item": [
+		{
+			"name": "Restaurant",
+			"item": [
+				{
+					"name": "Create Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Restaurante da Vovó\",\n    \"address\": \"Rua Avó\",\n    \"number\": 1,\n    \"neighborhood\": \"Avós\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"cuisineType\": \"afetiva\",\n    \"openAt\": \"11:00\",\n    \"closeAt\": \"22:00\",\n    \"intervalStart\": \"14:00\",\n    \"intervalFinish\": \"17:00\",\n    \"numberOfSeats\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurant/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurant",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Restaurant",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Restaurante da Vovó e do Vovô\",\n    \"address\": \"Rua Avó\",\n    \"number\": 1,\n    \"neighborhood\": \"Avós\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"cuisineType\": \"afetiva\",\n    \"openAt\": \"11:00\",\n    \"closeAt\": \"22:00\",\n    \"intervalStart\": \"14:00\",\n    \"intervalFinish\": \"17:00\",\n    \"numberOfSeats\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurant/edit/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurant",
+								"edit",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consult Restaurant By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurant/get/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurant",
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consult All Restaurants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/restaurant/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurant",
+								"get"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Vo",
+									"disabled": true
+								},
+								{
+									"key": "neighborhood",
+									"value": "Avós",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "Paulo",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "SP",
+									"disabled": true
+								},
+								{
+									"key": "cuisineType",
+									"value": "fet",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Availability",
+			"item": [
+				{
+					"name": "Process availability",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/available",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consult restaurante availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/available/find?idRestaurant=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"find"
+							],
+							"query": [
+								{
+									"key": "idRestaurant",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reserve",
+			"item": [
+				{
+					"name": "Create reserve",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idRestaurant\": 1,\n  \"reservationOwnerName\": \"Felipe Costa\",\n  \"reservationOwnerEmail\": \"fcosta.paltrinieri@gmail.com\",\n  \"reservationDate\": \"2024-09-18\",\n  \"reservationHour\": \"12:00\",\n  \"seatsReserved\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/available/reserve_request",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"reserve_request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update reserve",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idRestaurant\": 1,\n  \"reservationOwnerName\": \"Felipe Costa\",\n  \"reservationOwnerEmail\": \"fcosta.paltrinieri@gmail.com\",\n  \"reservationDate\": \"2024-09-18\",\n  \"reservationHour\": \"13:00\",\n  \"seatsReserved\": 12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/available/reserve_request/edit/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"reserve_request",
+								"edit",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete reserve",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idRestaurant\": 1,\n  \"reservationOwnerName\": \"Felipe Costa\",\n  \"reservationOwnerEmail\": \"fcosta.paltrinieri@gmail.com\",\n  \"reservationDate\": \"2024-09-18\",\n  \"reservationHour\": \"13:00\",\n  \"seatsReserved\": 12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/available/reserve_request/complete/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"reserve_request",
+								"complete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel reserve",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/available/reserve_request/cancel/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"reserve_request",
+								"cancel",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get reserves",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/available/reserve_request/get?idRestaurant=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"available",
+								"reserve_request",
+								"get"
+							],
+							"query": [
+								{
+									"key": "idRestaurant",
+									"value": "1"
+								},
+								{
+									"key": "status",
+									"value": "CONFIRMED",
+									"disabled": true
+								},
+								{
+									"key": "date",
+									"value": "2024-09-18",
+									"disabled": true
+								},
+								{
+									"key": "hour",
+									"value": "12:00",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evaluations",
+			"item": [
+				{
+					"name": "Create evaluation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idRestaurant\": 1,\n  \"idReserve\": \"1\",\n  \"evaluation\": \"muito bom\",\n  \"grade\": 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/evaluation/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evaluation",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get evaluation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/evaluation/get?idRestaurant=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evaluation",
+								"get"
+							],
+							"query": [
+								{
+									"key": "idRestaurant",
+									"value": "1"
+								},
+								{
+									"key": "idReserve",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

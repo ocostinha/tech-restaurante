@@ -20,6 +20,7 @@ public class RestaurantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -49,13 +50,13 @@ public class RestaurantEntity {
     @Column(name = "closeAt", nullable = false)
     private LocalTime closeAt;
 
-    @Column(name = "intervalStart", nullable = false)
+    @Column(name = "intervalStart")
     private LocalTime intervalStart;
 
-    @Column(name = "intervalFinish", nullable = false)
+    @Column(name = "intervalFinish")
     private LocalTime intervalFinish;
 
-    @Column(name = "numberOfSeats", nullable = false)
+    @Column(name = "numberOfSeats")
     private int numberOfSeats;
 
     @Column(name = "createdAt", nullable = false, updatable = false)

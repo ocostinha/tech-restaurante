@@ -2,11 +2,13 @@ package com.fiap.tech.restaurante.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class RestaurantRequestDTO {
     @NotNull
     public String name;

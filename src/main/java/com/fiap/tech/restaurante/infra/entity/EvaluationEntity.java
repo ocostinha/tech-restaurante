@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class EvaluationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "id_restaurant", nullable = false)

@@ -7,6 +7,7 @@ import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationByIdUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.UpdateReservationUseCase;
+import mocks.ReservationResponseDTOMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -54,7 +55,7 @@ class ReservationControllerTest {
         ReservationStatus status = ReservationStatus.CONFIRMED;
 
 
-        requestReservationDTO = new ReservationRequestDTO(restaurantId, ownerName, ownerEmail, reservationDate, reservationHour, numberOfSeats);
+        requestReservationDTO = new ReservationRequestDTO(restaurantId, ownerName, ownerEmail, reservationDate, "12:00", numberOfSeats);
 
         reservation = new Reservation(
                 reservationId,
@@ -69,13 +70,7 @@ class ReservationControllerTest {
                 LocalDateTime.now()
         );
 
-        responseReservationDTO = new ReservationResponseDTO(
-                reservationId,
-                ReservationStatus.CONFIRMED.name(),
-                5,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        responseReservationDTO = ReservationResponseDTOMock.mock();
     }
 
     @Test
