@@ -12,21 +12,21 @@ import static com.fiap.tech.restaurante.domain.mappers.utils.MappingUtils.RESERV
 
 @Mapper(componentModel = "spring")
 public interface ReservationMapper {
-    ReservationResponseDTO toResponseDTO (Reservation domain);
+    ReservationResponseDTO toResponseDTO(Reservation domain);
 
-    Reservation toDomain (ReservationEntity entity);
+    Reservation toDomain(ReservationEntity entity);
 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "status", expression = RESERVATION_STATUS_CONFIRMED)
-    Reservation toDomain (ReservationRequestDTO dto);
+    Reservation toDomain(ReservationRequestDTO dto);
 
-    ReservationEntity toEntity (Reservation domain);
+    ReservationEntity toEntity(Reservation domain);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    ReservationEntity update (Reservation domain, @MappingTarget ReservationEntity entity);
+    ReservationEntity update(Reservation domain, @MappingTarget ReservationEntity entity);
 }

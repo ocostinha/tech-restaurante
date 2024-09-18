@@ -23,8 +23,8 @@ public class UpdateRestaurantUseCase {
                                 restaurant,
                                 restaurantRepository.findById(idRestaurant)
                                         .orElseThrow(() -> new BusinessException("Restaurante não encontrado"))
+                        )
                 )
-        )
         );
     }
 

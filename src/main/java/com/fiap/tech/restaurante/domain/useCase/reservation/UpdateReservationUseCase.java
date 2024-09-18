@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class UpdateReservationUseCase {
 
     private final ReservationRepository reservationRepository;
-    private  final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
+    private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
     private final UpdateAvailableUseCase updateAvailableUseCase;
     private final ReservationMapper mapper;
 
@@ -42,7 +42,7 @@ public class UpdateReservationUseCase {
 
         updateAvailableUseCase.execute(
                 reservation.getIdRestaurant(),
-                (reservationUpdateRequest.getSeatsReserved() * -1),
+                ((reservationUpdateRequest.getSeatsReserved() - reservation.getSeatsReserved()) * -1),
                 reservation.getReservationDate(),
                 reservation.getReservationHour()
         );

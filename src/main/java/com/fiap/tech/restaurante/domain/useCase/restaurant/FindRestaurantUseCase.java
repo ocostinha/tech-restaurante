@@ -36,8 +36,7 @@ public class FindRestaurantUseCase {
             spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cuisineType"), "%" + cuisineType + "%"));
         }
 
-        List<RestaurantEntity> restaurants = restaurantRepository.findAll(spec);
-        return restaurants.stream().map(mapper::toDomain).toList();
+        return restaurantRepository.findAll(spec).stream().map(mapper::toDomain).toList();
     }
 }
 

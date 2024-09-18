@@ -17,7 +17,7 @@ public class CreateReservationUseCase {
 
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
-    private  final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
+    private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
     private final UpdateAvailableUseCase updateAvailableUseCase;
     private final ReservationMapper mapper;
 

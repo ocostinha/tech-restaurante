@@ -30,7 +30,7 @@ public class CreateAvailabilityUseCase {
 
             for (LocalTime time = openingTime; time.isBefore(closingTime); time = time.plusHours(1)) {
                 if (time.isBefore(restaurant.getIntervalStart()) ||
-                        time.isAfter(restaurant.getIntervalFinish().minusHours(1))){
+                        time.isAfter(restaurant.getIntervalFinish().minusHours(1))) {
                     AvailableEntity availableEntity = new AvailableEntity();
 
                     availableEntity.setIdRestaurant(restaurant.getId());

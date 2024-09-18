@@ -2,26 +2,23 @@ package com.fiap.tech.restaurante.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.UUID;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ReservationResponseDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+public class EvaluationResponseDTO {
     private Long id;
-    private String status;
-    private Integer seatsReserved;
-    private String reservationOwnerName;
-    private String reservationOwnerEmail;
-    private LocalDate reservationDate;
-    private LocalTime reservationHour;
+    private Long idRestaurant;
+    private UUID idReserve;
+    private String evaluation;
+    private int grade;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

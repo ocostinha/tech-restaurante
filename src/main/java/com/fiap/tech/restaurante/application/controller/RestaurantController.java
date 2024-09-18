@@ -32,8 +32,8 @@ public class RestaurantController {
     @Operation(summary = "Cadastrar restaurante")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Restaurante cadastrado com sucesso",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDetails.class)))
@@ -49,8 +49,8 @@ public class RestaurantController {
     @Operation(summary = "Atualizar restaurante")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Restaurante atualizado com sucesso",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDetails.class))),
@@ -72,9 +72,8 @@ public class RestaurantController {
     @Operation(summary = "Consultar restaurantes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Restaurante localizados",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
-            @ApiResponse(responseCode = "204", description = "Não existem restaurantes cadastrados")
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))})
     })
     @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
@@ -92,9 +91,9 @@ public class RestaurantController {
     @Operation(summary = "Consultar restaurante")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Restaurante solicitado",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
-            @ApiResponse(responseCode = "204", description = "Não existem restaurantes cadastrados")
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Não existem restaurantes cadastrados")
     })
     @GetMapping("/get/{id}")
     @ResponseStatus(HttpStatus.OK)

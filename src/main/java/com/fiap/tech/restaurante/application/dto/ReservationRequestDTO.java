@@ -1,5 +1,6 @@
 package com.fiap.tech.restaurante.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @AllArgsConstructor
 @Getter
@@ -31,7 +31,8 @@ public class ReservationRequestDTO {
     private LocalDate reservationDate;
 
     @NotNull
-    private LocalTime reservationHour;
+    @JsonFormat(pattern = "HH:mm")
+    private String reservationHour;
 
     @Min(1)
     private int seatsReserved;

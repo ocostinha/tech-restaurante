@@ -5,20 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.UUID;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class Available {
+@NoArgsConstructor
+public class Evaluation {
     private Long id;
     private Long idRestaurant;
-    private LocalDate date;
-    private LocalTime hour;
-    private int availableSeats;
+    private UUID idReserve;
+    private String evaluation;
+    private int grade;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -9,14 +9,14 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AvailableMapper {
-    Available toDomain (AvailableEntity entity);
+    Available toDomain(AvailableEntity entity);
 
-    AvailableResponseDTO toResponseDTO (Available domain);
+    AvailableResponseDTO toResponseDTO(Available domain);
 
-    AvailableEntity toEntity (Available domain);
+    AvailableEntity toEntity(Available domain);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    AvailableEntity update (Available domain, @MappingTarget AvailableEntity entity);
+    AvailableEntity update(Available domain, @MappingTarget AvailableEntity entity);
 }

@@ -1,5 +1,6 @@
 package com.fiap.tech.restaurante.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,12 @@ import java.time.LocalTime;
 @Setter
 public class AvailableResponseDTO {
     private Long idRestaurant;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
+
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime hour;
+
     private int availableSeats;
 }

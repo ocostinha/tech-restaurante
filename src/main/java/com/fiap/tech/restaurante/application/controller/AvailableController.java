@@ -25,13 +25,13 @@ public class AvailableController {
 
     private final FindAvailabilityUseCase findAvailabilityUseCase;
     private final CreateAvailabilityUseCase createAvailabilityUseCase;
-    private  final AvailableMapper mapper;
+    private final AvailableMapper mapper;
 
     @Operation(summary = "Consultar disponibilidade")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Disponibilidade do restaurante",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) })
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))})
     })
     @GetMapping("/find")
     @ResponseStatus(HttpStatus.OK)
@@ -39,7 +39,7 @@ public class AvailableController {
             @RequestParam(required = false) Integer seats,
             @RequestParam(required = false) LocalTime hour,
             @RequestParam Long idRestaurant
-            ) {
+    ) {
 
         return findAvailabilityUseCase.execute(seats, hour, idRestaurant).stream()
                 .map(mapper::toResponseDTO)
@@ -49,8 +49,8 @@ public class AvailableController {
     @Operation(summary = "Processar disponibilidade")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Disponibilidade processada",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class)) })
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RestaurantResponseDTO.class))})
     })
     @PostMapping
     @ResponseStatus(HttpStatus.OK)

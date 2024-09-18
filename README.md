@@ -1,10 +1,15 @@
-# tech-restaurante
+# PÓS TECH - Restaurante
 Nosso serviço de reservas online conta com 3 fluxos
 1. Cadastro de restaurante
 2. Reservas
 3. Avaliações
 
 Nesse arquivo estará contido o fluxo para utiliza-los.
+
+## Premissas do sistema
+
+Nossas reservas são apenas de hora em hora (13:00 / 14:00), não trabalhamos com horas quebradas por exemplo 13:15 / 14:40.
+Caso seja informado um horario quebrado, irá retornar uma mensagem de erro informando que não existe assento para a hora selecionada.
 
 ## Cadastro de restaurantes
 
@@ -39,3 +44,28 @@ Nossa aplicação possui um scheduler que roda todos os dias durante a madrugada
 ### Consultar disponibilidade do restaurante
 
 Para consultar a disponibilidade do restaurante, é necessário utilizar o endpoint GET /availability, sua documentação está disponível [aqui](http://localhost:8080/swagger-ui/index.html#/available-controller/findAvailability).
+
+### Cadastrar um nova reserva
+
+Para cadastrar uma nova reserva, o endpoint que deve é POST /available/reserve_request. Veja sua documentação [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/createReservation)
+
+### Alteração de reserva
+
+Caso haja necessidade de alterar a reserva, deve-se chamar o endpoint PUT /available/reserve_request/edit/{id}. Sua documentação está [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/updateReservation)
+
+### Cancelar reserva
+
+Para cancelar uma reserva, o endpoint é DELETE /available/reserve_request/cancel/{id}. A documentação pode ser acessada [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/cancelReservation)
+
+### Consultar reservas
+
+A consulta da reserva, pode ser feita por:
+1. Id -> documentação [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/findReservationById)
+2. Filtros (idRestaurante, status, data e hora) -> documentação [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/findReservations)
+
+### Concluir a reserva
+
+Este endpoint serve para concluir a reserva, quando o cliente está no restaurante, liberando assim a funcionalidade de avaliação. Sua documentação pode ser encontrada [aqui](http://localhost:8080/swagger-ui/index.html#/reservation-controller/completeReservation)
+
+## Avaliação
+
