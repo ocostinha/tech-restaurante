@@ -2,17 +2,25 @@ package com.fiap.tech.restaurante.usecase;
 
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Available;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.availability.FindAvailabilityByDataAndHourUseCase;
+import com.fiap.tech.restaurante.domain.useCase.availability.UpdateAvailableUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.UpdateReservationUseCase;
 import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
 import com.fiap.tech.restaurante.infra.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,6 +37,12 @@ class UpdateReservationUseCaseTest {
 
     @Mock
     private FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
+
+    @Mock
+    private UpdateAvailableUseCase updateAvailableUseCase;
+
+    @Mock
+    private ReservationMapperImpl mapper;
 
     @InjectMocks
     private UpdateReservationUseCase updateReservationUseCase;
@@ -83,14 +97,17 @@ class UpdateReservationUseCaseTest {
 
     @Test
     void shouldUpdateReservationSuccessfully() {
-
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservationEntity));
         when(findAvailabilityByDataAndHourUseCase.execute(any(), any(), any())).thenReturn(available);
+
+        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
+        doCallRealMethod().when(mapper).update(any(Reservation.class), any(ReservationEntity.class));
+        doNothing().when(updateAvailableUseCase).execute(anyLong(), anyInt(), any(), any());
+        when(reservationRepository.save(any())).thenReturn(reservationEntity);
 
         Reservation updatedReservation = updateReservationUseCase.execute(
                 reservationId, reservation
         );
-
 
         assertEquals("nome teste", updatedReservation.getReservationOwnerName());
         assertEquals("nometeste@email.com", updatedReservation.getReservationOwnerEmail());
