@@ -1,4 +1,4 @@
-package com.fiap.tech.restaurante.bdd.stepDefinitions;
+package bdd.stepDefinitions;
 
 import com.fiap.tech.restaurante.RestauranteApplication;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
@@ -7,26 +7,21 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.junit.CucumberOptions;
 import io.cucumber.spring.CucumberContextConfiguration;
 import mocks.RestaurantRequestDTOMock;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-@RunWith(SpringRunner.class)
-@CucumberOptions(features = "src/integratedTest/java/com/fiap/tech/restaurante/bdd/features")
-@CucumberContextConfiguration
 @SpringBootTest(classes = RestauranteApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
+@CucumberContextConfiguration
 public class CreateRestaurantStepDefinitionsTest {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -34,28 +29,9 @@ public class CreateRestaurantStepDefinitionsTest {
     private ErrorDetails errorDetails;
     private Integer responseStatusCode;
 
-    @When("The client calls endpoint to create with valid payload")
-    public void theClientCallsRestaurantCreateWithValidPayload() {
-        String restaurantName = "Restaurante Teste";
-        try {
-            var restResponse = createMockedRestaurant(restaurantName);
-
-            response = restResponse.getBody();
-            responseStatusCode = restResponse.getStatusCode().value();
-        } catch (HttpStatusCodeException ex) {
-            errorDetails = ex.getResponseBodyAs(ErrorDetails.class);
-            responseStatusCode = ex.getStatusCode().value();
-        }
-    }
-
     @Then("The client receives status code of {int}")
     public void theClientReceivesStatusCodeOf(int statusCode) {
         Assert.assertEquals(statusCode, (int) responseStatusCode);
-    }
-
-    @And("The client receives response body with ID {int}")
-    public void theClientReceivesResponseBodyWithID(int id) {
-        Assert.assertEquals(id, Objects.requireNonNull(response).getId().intValue());
     }
 
     @NotNull
@@ -80,5 +56,23 @@ public class CreateRestaurantStepDefinitionsTest {
     @And("The client receives response body with message {string}")
     public void theClientReceivesResponseBodyWithMessage(String errorMessage) {
         Assert.assertEquals(errorMessage, errorDetails.getMessage());
+    }
+
+    @When("The client calls endpoint to create with valid payload for restaurant {string}")
+    public void theClientCallsEndpointToCreateWithValidPayloadForRestaurant(String restaurantName) {
+        try {
+            var restResponse = createMockedRestaurant(restaurantName);
+
+            response = restResponse.getBody();
+            responseStatusCode = restResponse.getStatusCode().value();
+        } catch (HttpStatusCodeException ex) {
+            errorDetails = ex.getResponseBodyAs(ErrorDetails.class);
+            responseStatusCode = ex.getStatusCode().value();
+        }
+    }
+
+    @And("The client receives response body with restaurant name {string}")
+    public void theClientReceivesResponseBodyWithRestaurantName(String restaurantName) {
+        Assert.assertEquals(restaurantName, Objects.requireNonNull(response).getName());
     }
 }
