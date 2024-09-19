@@ -1,4 +1,4 @@
-package bdd.stepDefinitions;
+package com.fiap.tech.restaurante.bdd.stepDefinitions;
 
 import com.fiap.tech.restaurante.RestauranteApplication;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Objects;
 
 @RunWith(SpringRunner.class)
-@CucumberOptions(features = "src/bdd/features")
+@CucumberOptions(features = "src/integratedTest/java/com/fiap/tech/restaurante/bdd/features")
 @CucumberContextConfiguration
 @SpringBootTest(classes = RestauranteApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")

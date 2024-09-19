@@ -1,7 +1,8 @@
 package com.fiap.tech.restaurante.usecase;
 
-import com.fiap.tech.restaurante.domain.exception.ReservationNotFoundException;
+import com.fiap.tech.restaurante.domain.exception.ResourceNotFoundException;
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationByIdUseCase;
 import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
@@ -22,6 +23,9 @@ class FindReservationByIdUseCaseTest {
     @Mock
     private ReservationRepository repository;
 
+    @Mock
+    private ReservationMapperImpl mapper;
+
     @InjectMocks
     private FindReservationByIdUseCase findReservationByIdUseCase;
 
@@ -41,6 +45,7 @@ class FindReservationByIdUseCaseTest {
     @Test
     void findReservation_ShouldReturnReservation_WhenValidIdIsGiven() {
         when(repository.findById(validId)).thenReturn(Optional.of(reservation));
+        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
 
         Reservation foundReservation = findReservationByIdUseCase.execute(validId);
 
@@ -60,12 +65,13 @@ class FindReservationByIdUseCaseTest {
 
     @Test
     void findReservation_ShouldThrowReservationNotFoundException_WhenReservationDoesNotExist() {
-        when(repository.findById(invalidId)).thenReturn(null);
+        when(repository.findById(invalidId)).thenReturn(Optional.empty());
+        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
 
-        ReservationNotFoundException exception = assertThrows(ReservationNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> findReservationByIdUseCase.execute(invalidId));
 
-        assertEquals("A reserva não foi encontrada com o id: " + invalidId, exception.getMessage());
+        assertEquals("Reserva não encontrada", exception.getMessage());
         verify(repository, times(1)).findById(invalidId);
     }
 }

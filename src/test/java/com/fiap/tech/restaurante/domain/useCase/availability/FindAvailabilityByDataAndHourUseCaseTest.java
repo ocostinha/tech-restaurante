@@ -1,6 +1,7 @@
 package com.fiap.tech.restaurante.domain.useCase.availability;
 
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
+import com.fiap.tech.restaurante.domain.mappers.AvailableMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Available;
 import com.fiap.tech.restaurante.infra.entity.AvailableEntity;
 import com.fiap.tech.restaurante.infra.repository.AvailableRepository;
@@ -26,6 +27,9 @@ class FindAvailabilityByDataAndHourUseCaseTest {
     @Mock
     private AvailableRepository availableRepository;
 
+    @Mock
+    private AvailableMapperImpl mapper;
+
     private Long restaurantId;
     private AvailableEntity available;
 
@@ -39,6 +43,7 @@ class FindAvailabilityByDataAndHourUseCaseTest {
     @Test
     void shouldFindAvailabilityByRestaurantIdDateAndHour() {
         when(availableRepository.findByIdRestaurantAndDateAndHour(any(), any(), any())).thenReturn(Optional.of(available));
+        doCallRealMethod().when(mapper).toDomain(any(AvailableEntity.class));
 
         Available result = findAvailabilityByDataAndHourUseCase.execute(restaurantId, LocalDate.now(), LocalTime.of(12, 0));
 

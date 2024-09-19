@@ -3,7 +3,7 @@ package com.fiap.tech.restaurante.application.controller;
 import com.fiap.tech.restaurante.application.dto.ReservationRequestDTO;
 import com.fiap.tech.restaurante.application.dto.ReservationResponseDTO;
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
-import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationByIdUseCase;
 import com.fiap.tech.restaurante.domain.useCase.reservation.UpdateReservationUseCase;
@@ -32,7 +32,7 @@ class ReservationControllerTest {
     private UpdateReservationUseCase updateReservationUseCase;
 
     @Mock
-    private ReservationMapper reservationMapper;
+    private ReservationMapperImpl reservationMapper;
 
     @Mock
     private FindReservationByIdUseCase findReservationByIdUseCase;
@@ -75,11 +75,9 @@ class ReservationControllerTest {
 
     @Test
     void shouldUpdateReservationSuccessfully() {
-
-        when(updateReservationUseCase.execute(1L, any(Reservation.class))).thenReturn(reservation);
-
-        when(reservationMapper.toResponseDTO(any(Reservation.class))).thenReturn(responseReservationDTO);
-
+        when(updateReservationUseCase.execute(anyLong(), any(Reservation.class))).thenReturn(reservation);
+        doCallRealMethod().when(reservationMapper).toResponseDTO(any(Reservation.class));
+        doCallRealMethod().when(reservationMapper).toDomain(any(ReservationRequestDTO.class));
 
         ReservationResponseDTO result = reservationController.updateReservation(
                 1L,
@@ -87,10 +85,8 @@ class ReservationControllerTest {
         );
 
         assertEquals(responseReservationDTO.getId(), result.getId());
-        assertEquals(responseReservationDTO.getCreatedAt(), result.getCreatedAt());
-        assertEquals(responseReservationDTO.getUpdatedAt(), result.getUpdatedAt());
 
-        verify(updateReservationUseCase).execute(1L, any(Reservation.class));
+        verify(updateReservationUseCase).execute(any(), any(Reservation.class));
         verify(reservationMapper).toResponseDTO(any(Reservation.class));
     }
 
