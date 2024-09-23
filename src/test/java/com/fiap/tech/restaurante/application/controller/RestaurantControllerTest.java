@@ -2,7 +2,6 @@ package com.fiap.tech.restaurante.application.controller;
 
 import com.fiap.tech.restaurante.application.dto.RestaurantRequestDTO;
 import com.fiap.tech.restaurante.application.dto.RestaurantResponseDTO;
-import com.fiap.tech.restaurante.domain.exception.BusinessException;
 import com.fiap.tech.restaurante.domain.exception.ResourceNotFoundException;
 import com.fiap.tech.restaurante.domain.mappers.RestaurantMapper;
 import com.fiap.tech.restaurante.domain.model.Restaurant;
@@ -12,14 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
