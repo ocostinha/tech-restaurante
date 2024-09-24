@@ -14,12 +14,15 @@ import org.mockito.Mock;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.mockito.MockitoAnnotations;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class CancelReservationUseCaseTest {
@@ -53,6 +56,15 @@ class CancelReservationUseCaseTest {
                 .build();
 
         reservation = new Reservation(1L, 1L, "Test Test", "test@teste.com", reservationEntity.getReservationDate(), reservationEntity.getReservationHour(), reservationEntity.getSeatsReserved(), ReservationStatus.CANCELED, null, null);
+
+        reservation = Reservation.builder()
+                .id(1L)
+                .idRestaurant(1L)
+                .reservationOwnerName("Test Owner")
+                .reservationOwnerEmail("owner@test.com")
+                .seatsReserved(4)
+                .status(ReservationStatus.CANCELED)
+                .build();
     }
 
     @Test
@@ -84,5 +96,19 @@ class CancelReservationUseCaseTest {
         verify(reservationRepository).findById(1L);
         verify(reservationRepository, never()).save(any(ReservationEntity.class));
         verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(LocalDate.class), any(LocalTime.class));
+
+        verify(reservationRepository).findById(1L);
+        verify(reservationRepository).save(reservationEntity);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenReservationNotFound() {
+        when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> cancelReservationUseCase.execute(1L));
+
+        verify(reservationRepository).findById(1L);
+        verify(reservationRepository, never()).save(any());
+        verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(), any());
     }
 }

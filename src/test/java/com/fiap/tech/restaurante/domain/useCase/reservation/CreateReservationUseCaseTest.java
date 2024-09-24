@@ -7,6 +7,7 @@ import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.availability.FindAvailabilityByDataAndHourUseCase;
 import com.fiap.tech.restaurante.domain.useCase.availability.UpdateAvailableUseCase;
 import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
+import com.fiap.tech.restaurante.infra.entity.RestaurantEntity;
 import com.fiap.tech.restaurante.infra.repository.ReservationRepository;
 import com.fiap.tech.restaurante.infra.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -23,6 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class CreateReservationUseCaseTest {
 
@@ -46,35 +55,40 @@ class CreateReservationUseCaseTest {
 
     private Reservation reservationRequest;
     private ReservationEntity reservationEntity;
-    private Reservation reservation;
-    private Available availability;
+    private Available available;
+    private RestaurantEntity restaurantEntity;
 
     @BeforeEach
     void setUp() {
-        openMocks(this);
+        MockitoAnnotations.openMocks(this);
 
-        reservationRequest = new Reservation(null, 1L, "Test Test", "test@test.com", LocalDate.now(), LocalTime.of(12, 0), 4, null, null, null);
-
-        reservationEntity = ReservationEntity.builder()
-                .id(1L)
+        reservationRequest = Reservation.builder()
                 .idRestaurant(1L)
+                .reservationOwnerName("Owner")
+                .reservationOwnerEmail("owner@test.com")
                 .seatsReserved(4)
-                .reservationDate(LocalDate.now())
-                .reservationHour(LocalTime.of(12, 0))
                 .build();
 
-        reservation = new Reservation(1L, 1L, "Test Test", "test@test.com", LocalDate.now(), LocalTime.of(12, 0), 4, null, null, null);
+        reservationEntity = ReservationEntity.builder()
+                .idRestaurant(1L)
+                .reservationOwnerName("Owner")
+                .reservationOwnerEmail("owner@test.com")
+                .seatsReserved(4)
+                .build();
 
-        availability = new Available(1L, LocalDate.now(), LocalTime.of(12, 0), 1L, 10);
+        available = new Available(1L, 1L, null, null, 10, null, null);
+
+        restaurantEntity = new RestaurantEntity();
+        restaurantEntity.setId(1L);
+        restaurantEntity.setName("Restaurant Test");
     }
 
     @Test
     void shouldCreateReservationSuccessfully() {
-        when(restaurantRepository.findById(anyLong())).thenReturn(Optional.of(new Object()));
-        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(LocalDate.class), any(LocalTime.class))).thenReturn(availability);
+        when(restaurantRepository.findById(anyLong())).thenReturn(Optional.of(restaurantEntity));
+        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(LocalDate.class), any(LocalTime.class))).thenReturn(available);
         when(reservationMapper.toEntity(any(Reservation.class))).thenReturn(reservationEntity);
         when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
-        when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
         Reservation result = createReservationUseCase.execute(reservationRequest);
 
@@ -100,9 +114,9 @@ class CreateReservationUseCaseTest {
 
     @Test
     void shouldThrowBusinessExceptionWhenNoSeatsAvailable() {
-        availability.setAvailableSeats(2); // Apenas 2 assentos disponíveis
-        when(restaurantRepository.findById(anyLong())).thenReturn(Optional.of(new Object()));
-        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(LocalDate.class), any(LocalTime.class))).thenReturn(availability);
+        available.setAvailableSeats(2); // Apenas 2 assentos disponíveis
+        when(restaurantRepository.findById(anyLong())).thenReturn(Optional.of(restaurantEntity));
+        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(LocalDate.class), any(LocalTime.class))).thenReturn(available);
 
         BusinessException exception = assertThrows(BusinessException.class, () -> createReservationUseCase.execute(reservationRequest));
 
@@ -111,5 +125,46 @@ class CreateReservationUseCaseTest {
         verify(findAvailabilityByDataAndHourUseCase).execute(1L, LocalDate.now(), LocalTime.of(12, 0));
         verify(reservationRepository, never()).save(any(ReservationEntity.class));
         verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(LocalDate.class), any(LocalTime.class));
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurantEntity));
+        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(), any())).thenReturn(available);
+        when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
+        when(reservationMapper.toEntity(any(Reservation.class))).thenReturn(reservationEntity);
+        when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservationRequest);
+
+        Reservation result = createReservationUseCase.execute(reservationRequest);
+
+        assertNotNull(result);
+        assertEquals("Owner", result.getReservationOwnerName());
+
+        verify(restaurantRepository).findById(1L);
+        verify(findAvailabilityByDataAndHourUseCase).execute(anyLong(), any(), any());
+        verify(reservationRepository).save(any(ReservationEntity.class));
+        verify(updateAvailableUseCase).execute(anyLong(), anyInt(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRestaurantNotFound() {
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(BusinessException.class, () -> createReservationUseCase.execute(reservationRequest));
+
+        verify(restaurantRepository).findById(1L);
+        verify(findAvailabilityByDataAndHourUseCase, never()).execute(anyLong(), any(), any());
+        verify(reservationRepository, never()).save(any(ReservationEntity.class));
+        verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNoSeatsAvailable() {
+        available.setAvailableSeats(2);
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurantEntity));
+        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(), any())).thenReturn(available);
+
+        assertThrows(BusinessException.class, () -> createReservationUseCase.execute(reservationRequest));
+
+        verify(restaurantRepository).findById(1L);
+        verify(findAvailabilityByDataAndHourUseCase).execute(anyLong(), any(), any());
+        verify(reservationRepository, never()).save(any(ReservationEntity.class));
+        verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(), any());
     }
 }

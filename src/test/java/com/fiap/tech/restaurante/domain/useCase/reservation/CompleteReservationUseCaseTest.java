@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
@@ -40,11 +41,22 @@ class CompleteReservationUseCaseTest {
         reservationEntity = ReservationEntity.builder()
                 .id(1L)
                 .idRestaurant(1L)
+                .reservationOwnerName("Test Owner")
+                .reservationOwnerEmail("owner@test.com")
+                .reservationDate(null)
+                .reservationHour(null)
                 .seatsReserved(4)
                 .status(ReservationStatus.CONFIRMED)
                 .build();
 
-        reservation = new Reservation(1L, 1L, "Test Test", "test@test.com", null, null, 4, ReservationStatus.COMPLETED, null, null);
+        reservation = Reservation.builder()
+                .id(1L)
+                .idRestaurant(1L)
+                .reservationOwnerName("Test Owner")
+                .reservationOwnerEmail("owner@test.com")
+                .seatsReserved(4)
+                .status(ReservationStatus.COMPLETED)
+                .build();
     }
 
     @Test
@@ -71,5 +83,18 @@ class CompleteReservationUseCaseTest {
         verify(reservationRepository).findById(1L);
         verify(reservationRepository, never()).save(any(ReservationEntity.class));
         verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
+
+        verify(reservationRepository).findById(1L);
+        verify(reservationRepository).save(reservationEntity);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenReservationNotFound() {
+        when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(BusinessException.class, () -> completeReservationUseCase.execute(1L));
+
+        verify(reservationRepository).findById(1L);
+        verify(reservationRepository, never()).save(any());
     }
 }
