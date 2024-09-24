@@ -3,7 +3,6 @@ package com.fiap.tech.restaurante.usecase;
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import com.fiap.tech.restaurante.domain.exception.BusinessException;
 import com.fiap.tech.restaurante.domain.model.Reservation;
-import com.fiap.tech.restaurante.domain.model.Restaurant;
 import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationUseCase;
 import com.fiap.tech.restaurante.domain.useCase.restaurant.DeleteRestaurantByIdUseCase;
 import com.fiap.tech.restaurante.infra.entity.RestaurantEntity;
@@ -32,8 +31,6 @@ class DeleteRestaurantByIdUseCaseTest {
 
     @InjectMocks
     private DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
-
-    private Restaurant restaurant;
 
     @BeforeEach
     void setUp(){
