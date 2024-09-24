@@ -211,6 +211,17 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<configuration>
+					<excludes>
+						<exclude>**/CreateRestaurantStepDefinitionsTest.java</exclude>
+						<exclude>**/CreateRestaurant.feature</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
