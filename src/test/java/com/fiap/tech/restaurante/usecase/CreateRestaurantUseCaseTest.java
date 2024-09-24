@@ -93,8 +93,8 @@ class CreateRestaurantUseCaseTest {
 	void shouldThrowBusinessExceptionWhenRestaurantAlreadyExists() {
 		when(restaurantRepository.findByName(restaurant.getName())).thenReturn(Optional.of(restaurantEntity));
 
-		BusinessException exception = assertThrows(BusinessException.class, () ->
-				createRestaurantUseCase.execute(restaurant));
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> createRestaurantUseCase.execute(restaurant));
 
 		assertEquals("Já existe um restaurante com esse nome na plataforma.", exception.getMessage());
 

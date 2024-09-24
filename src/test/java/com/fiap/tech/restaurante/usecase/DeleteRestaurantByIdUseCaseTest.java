@@ -61,8 +61,8 @@ class DeleteRestaurantByIdUseCaseTest {
 		when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
 			.thenReturn(List.of(new Reservation()));
 
-		BusinessException exception = assertThrows(BusinessException.class, () ->
-				deleteRestaurantByIdUseCase.execute(restaurantId));
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> deleteRestaurantByIdUseCase.execute(restaurantId));
 
 		assertEquals("Apenas restaurantes sem reserva confirmada para a data de hoje podem ser excluídos",
 				exception.getMessage());
@@ -78,8 +78,8 @@ class DeleteRestaurantByIdUseCaseTest {
 
 		when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
 
-		BusinessException exception = assertThrows(BusinessException.class, () ->
-				deleteRestaurantByIdUseCase.execute(restaurantId));
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> deleteRestaurantByIdUseCase.execute(restaurantId));
 
 		assertEquals("Restaurante não encontrado", exception.getMessage());
 

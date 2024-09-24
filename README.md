@@ -82,6 +82,12 @@ A avaliação de uma reserva COMPLETA poderá ser realizada uma unica vez, sem a
 
 As avaliações podem ser consultadas por reserva ou por restaurante, no endpoint GET evaluation/get. Sua documentação pode ser vista [aqui](http://localhost:8080/swagger-ui/index.html#/evaluation-controller/findReservations)
 
+## Qualidade de Código
+
+Utilizamos o spring-javaformat para garantir a homogeneidade do código (espaçamento, quebra de linha, tamanho de linha, etc). A documentação do plugin pode ser acessada [aqui](https://github.com/spring-io/spring-javaformat)
+
+Para a validação basta executar a tarefa validate do maven e caso deseje corrigir automaticamente o código criado, pode-se utilizar o comando `./mvnw spring-javaformat:apply`
+
 ## Testes
 
 Nossa aplicação conta com testes integrados, unitários e de performance. Os testes podem ser validados abaixo:
@@ -97,5 +103,19 @@ Os testes unitários, estão no package /src/test, eles possuem cobertura minima
 
 ### Testes de performance
 
-Os testes de performance foram realizados utilizando o JMeter. Abaixo o resultado obtido.
+Os testes de performance estão no package /jMeter podendo ser executado a qualquer momento. Abaixo a execução em uma máquina de desenvolvimento com as seguintes caracteristicas:
+
+![img.png](img.png)
+
+Houve um pico de processamento pois a nossa aplicação é uma aplicação basicamente de I/O no Banco de Dados.
+
+![img_1.png](img_1.png)
+
+A memória ficou estável, pois é muito pouco utilizada e quase não há validações e criações de variaveis em memória
+
+![img_2.png](img_2.png)
+
+Houve um aumento na latencia de gravação pois tivemos uma sobrecarga no sistema que gerou 124671 novos registros e consultou 127764 vezes a base de dados simultaneamente
+
+![img_3.png](img_3.png)
 
