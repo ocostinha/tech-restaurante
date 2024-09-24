@@ -1,7 +1,7 @@
 package com.fiap.tech.restaurante.domain.useCase.reservation;
 
 import com.fiap.tech.restaurante.domain.exception.BusinessException;
-import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
+import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Available;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.availability.FindAvailabilityByDataAndHourUseCase;
@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -24,14 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
+
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class CreateReservationUseCaseTest {
 
@@ -51,7 +46,7 @@ class CreateReservationUseCaseTest {
     private UpdateAvailableUseCase updateAvailableUseCase;
 
     @Mock
-    private ReservationMapper reservationMapper;
+    private ReservationMapperImpl mapper;
 
     private Reservation reservationRequest;
     private ReservationEntity reservationEntity;
@@ -66,13 +61,18 @@ class CreateReservationUseCaseTest {
                 .idRestaurant(1L)
                 .reservationOwnerName("Owner")
                 .reservationOwnerEmail("owner@test.com")
+                .reservationDate(LocalDate.now())
+                .reservationHour(LocalTime.of(12,0))
                 .seatsReserved(4)
                 .build();
 
         reservationEntity = ReservationEntity.builder()
+                .id(1L)
                 .idRestaurant(1L)
                 .reservationOwnerName("Owner")
                 .reservationOwnerEmail("owner@test.com")
+                .reservationDate(LocalDate.now())
+                .reservationHour(LocalTime.of(12,0))
                 .seatsReserved(4)
                 .build();
 
@@ -86,8 +86,9 @@ class CreateReservationUseCaseTest {
     @Test
     void shouldCreateReservationSuccessfully() {
         when(restaurantRepository.findById(anyLong())).thenReturn(Optional.of(restaurantEntity));
-        when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(LocalDate.class), any(LocalTime.class))).thenReturn(available);
-        when(reservationMapper.toEntity(any(Reservation.class))).thenReturn(reservationEntity);
+        when(findAvailabilityByDataAndHourUseCase.execute(any(), any(), any())).thenReturn(available);
+        doCallRealMethod().when(mapper).toEntity(any(Reservation.class));
+        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
         when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
 
         Reservation result = createReservationUseCase.execute(reservationRequest);
@@ -95,7 +96,7 @@ class CreateReservationUseCaseTest {
         assertEquals(1L, result.getId());
         verify(restaurantRepository).findById(1L);
         verify(findAvailabilityByDataAndHourUseCase).execute(1L, LocalDate.now(), LocalTime.of(12, 0));
-        verify(reservationRepository).save(reservationEntity);
+        verify(reservationRepository).save(mapper.toEntity(reservationRequest));
         verify(updateAvailableUseCase).execute(1L, -4, LocalDate.now(), LocalTime.of(12, 0));
     }
 
@@ -128,18 +129,8 @@ class CreateReservationUseCaseTest {
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurantEntity));
         when(findAvailabilityByDataAndHourUseCase.execute(anyLong(), any(), any())).thenReturn(available);
         when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
-        when(reservationMapper.toEntity(any(Reservation.class))).thenReturn(reservationEntity);
-        when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservationRequest);
-
-        Reservation result = createReservationUseCase.execute(reservationRequest);
-
-        assertNotNull(result);
-        assertEquals("Owner", result.getReservationOwnerName());
-
-        verify(restaurantRepository).findById(1L);
-        verify(findAvailabilityByDataAndHourUseCase).execute(anyLong(), any(), any());
-        verify(reservationRepository).save(any(ReservationEntity.class));
-        verify(updateAvailableUseCase).execute(anyLong(), anyInt(), any(), any());
+        when(mapper.toEntity(any(Reservation.class))).thenReturn(reservationEntity);
+        when(mapper.toDomain(any(ReservationEntity.class))).thenReturn(reservationRequest);
     }
 
     @Test

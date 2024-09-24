@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
@@ -83,9 +82,6 @@ class CompleteReservationUseCaseTest {
         verify(reservationRepository).findById(1L);
         verify(reservationRepository, never()).save(any(ReservationEntity.class));
         verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
-
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository).save(reservationEntity);
     }
 
     @Test

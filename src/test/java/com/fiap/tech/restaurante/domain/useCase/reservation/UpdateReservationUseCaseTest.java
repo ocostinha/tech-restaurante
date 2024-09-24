@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -64,7 +65,7 @@ class UpdateReservationUseCaseTest {
 
         updatedReservation = new Reservation(1L, 1L, "Test Test", "test@test.com", LocalDate.now(), LocalTime.of(12, 0), 6, ReservationStatus.CONFIRMED, null, null);
 
-        availability = new Available(1L, LocalDate.now(), LocalTime.of(12, 0), 1L, 10);
+        availability = new Available(1L, 1L, LocalDate.now(), LocalTime.of(12, 0), 10, LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Test

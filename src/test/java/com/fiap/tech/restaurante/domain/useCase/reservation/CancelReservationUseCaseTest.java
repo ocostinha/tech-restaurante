@@ -14,7 +14,6 @@ import org.mockito.Mock;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
@@ -96,9 +95,6 @@ class CancelReservationUseCaseTest {
         verify(reservationRepository).findById(1L);
         verify(reservationRepository, never()).save(any(ReservationEntity.class));
         verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(LocalDate.class), any(LocalTime.class));
-
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository).save(reservationEntity);
     }
 
     @Test

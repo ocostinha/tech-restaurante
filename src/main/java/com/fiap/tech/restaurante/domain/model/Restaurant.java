@@ -1,5 +1,6 @@
 package com.fiap.tech.restaurante.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.*;
 
 import java.time.LocalDateTime;

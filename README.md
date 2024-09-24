@@ -84,3 +84,18 @@ As avaliações podem ser consultadas por reserva ou por restaurante, no endpoin
 
 ## Testes
 
+Nossa aplicação conta com testes integrados, unitários e de performance. Os testes podem ser validados abaixo:
+
+### Testes de integração
+
+Estão no package /src/test/resources, eles testam o fluxo end to end da aplicação, nos cenários criticos. Utilizamos o cucumber para fazer os BDD tests.
+Seu banco de dados em memória permite que a execução simule exatamente o contexto de produção.
+
+### Testes unitários
+
+Os testes unitários, estão no package /src/test, eles possuem cobertura minima de testes validada pelo JaCoCo. Para visualizar o relatório do JaCoCo deve-se executar o comando mvn clean install no terminal e após a execução o relatório estará disponível em target/site/jacoco/index.html
+
+### Testes de performance
+
+Os testes de performance foram realizados utilizando o JMeter. Abaixo o resultado obtido.
+
