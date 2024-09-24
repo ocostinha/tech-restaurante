@@ -1,10 +1,9 @@
-package com.fiap.tech.restaurante.usecase;
+package com.fiap.tech.restaurante.domain.useCase.reservation;
 
 import com.fiap.tech.restaurante.domain.exception.ResourceNotFoundException;
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Reservation;
-import com.fiap.tech.restaurante.domain.useCase.reservation.FindReservationByIdUseCase;
 import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
 import com.fiap.tech.restaurante.infra.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;

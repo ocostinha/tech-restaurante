@@ -1,26 +1,19 @@
-package com.fiap.tech.restaurante.usecase;
+package com.fiap.tech.restaurante.domain.useCase.reservation;
 
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import com.fiap.tech.restaurante.domain.exception.UnprocessableEntityException;
-import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapperImpl;
 import com.fiap.tech.restaurante.domain.model.Available;
 import com.fiap.tech.restaurante.domain.model.Reservation;
 import com.fiap.tech.restaurante.domain.useCase.availability.FindAvailabilityByDataAndHourUseCase;
 import com.fiap.tech.restaurante.domain.useCase.availability.UpdateAvailableUseCase;
-import com.fiap.tech.restaurante.domain.useCase.reservation.UpdateReservationUseCase;
 import com.fiap.tech.restaurante.infra.entity.ReservationEntity;
 import com.fiap.tech.restaurante.infra.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
