@@ -8,17 +8,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class ReservationResponseDTOMock {
-    public static ReservationResponseDTO mock() {
-        return new ReservationResponseDTO(
-                1L,
-                ReservationStatus.CONFIRMED.name(),
-                5,
-                "Cliente",
-                "cliente@email.com.br",
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-    }
+
+	public static ReservationResponseDTO mock() {
+		return new ReservationResponseDTO(1L, ReservationStatus.CONFIRMED.name(), 5, "Cliente", "cliente@email.com.br",
+				LocalDate.now(), LocalTime.now(), LocalDateTime.now(), LocalDateTime.now());
+	}
+
 }

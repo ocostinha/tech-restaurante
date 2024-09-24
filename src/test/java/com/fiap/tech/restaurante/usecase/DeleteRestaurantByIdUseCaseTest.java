@@ -23,66 +23,67 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class DeleteRestaurantByIdUseCaseTest {
-    @Mock
-    private RestaurantRepository restaurantRepository;
 
-    @Mock
-    private FindReservationUseCase findReservationUseCase;
+	@Mock
+	private RestaurantRepository restaurantRepository;
 
-    @InjectMocks
-    private DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
+	@Mock
+	private FindReservationUseCase findReservationUseCase;
 
-    @BeforeEach
-    void setUp(){
-        MockitoAnnotations.openMocks(this);
-    }
+	@InjectMocks
+	private DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
 
-    @Test
-    void shouldDeleteRestaurantWhenNoConfirmedReservations() {
-        Long restaurantId = 1L;
-        RestaurantEntity restaurantEntity = new RestaurantEntity();
-        restaurantEntity.setId(restaurantId);
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-        when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
-                .thenReturn(Collections.emptyList());
+	@Test
+	void shouldDeleteRestaurantWhenNoConfirmedReservations() {
+		Long restaurantId = 1L;
+		RestaurantEntity restaurantEntity = new RestaurantEntity();
+		restaurantEntity.setId(restaurantId);
 
-        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurantEntity));
+		when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
+			.thenReturn(Collections.emptyList());
 
-        deleteRestaurantByIdUseCase.execute(restaurantId);
+		when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurantEntity));
 
-        verify(restaurantRepository, times(1)).delete(restaurantEntity);
-    }
+		deleteRestaurantByIdUseCase.execute(restaurantId);
 
-    @Test
-    void shouldThrowExceptionWhenThereAreConfirmedReservations(){
-        Long restaurantId = 1L;
+		verify(restaurantRepository, times(1)).delete(restaurantEntity);
+	}
 
-        when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
-                .thenReturn(List.of(new Reservation()));
+	@Test
+	void shouldThrowExceptionWhenThereAreConfirmedReservations() {
+		Long restaurantId = 1L;
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> {
-            deleteRestaurantByIdUseCase.execute(restaurantId);
-        });
+		when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
+			.thenReturn(List.of(new Reservation()));
 
-        assertEquals("Apenas restaurantes sem reserva confirmada para a data de hoje podem ser excluídos", exception.getMessage());
+		BusinessException exception = assertThrows(BusinessException.class, () ->
+				deleteRestaurantByIdUseCase.execute(restaurantId));
 
-        verify(restaurantRepository, never()).delete(any(RestaurantEntity.class));
-    }
+		assertEquals("Apenas restaurantes sem reserva confirmada para a data de hoje podem ser excluídos",
+				exception.getMessage());
 
-    @Test
-    void shouldThrowExceptionWhenRestaurantNotFound() {
-        Long restaurantId = 1L;
-        when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
-                .thenReturn(Collections.emptyList());
+		verify(restaurantRepository, never()).delete(any(RestaurantEntity.class));
+	}
 
-        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
+	@Test
+	void shouldThrowExceptionWhenRestaurantNotFound() {
+		Long restaurantId = 1L;
+		when(findReservationUseCase.execute(restaurantId, LocalDate.now(), null, ReservationStatus.CONFIRMED))
+			.thenReturn(Collections.emptyList());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> {
-            deleteRestaurantByIdUseCase.execute(restaurantId);
-        });
+		when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
 
-        assertEquals("Restaurante não encontrado", exception.getMessage());
+		BusinessException exception = assertThrows(BusinessException.class, () ->
+				deleteRestaurantByIdUseCase.execute(restaurantId));
 
-        verify(restaurantRepository, never()).delete(any(RestaurantEntity.class));
-    }
+		assertEquals("Restaurante não encontrado", exception.getMessage());
+
+		verify(restaurantRepository, never()).delete(any(RestaurantEntity.class));
+	}
+
 }

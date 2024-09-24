@@ -23,38 +23,35 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AvailableController {
 
-    private final FindAvailabilityUseCase findAvailabilityUseCase;
-    private final CreateAvailabilityUseCase createAvailabilityUseCase;
-    private final AvailableMapper mapper;
+	private final FindAvailabilityUseCase findAvailabilityUseCase;
 
-    @Operation(summary = "Consultar disponibilidade")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Disponibilidade do restaurante",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class))})
-    })
-    @GetMapping("/find")
-    @ResponseStatus(HttpStatus.OK)
-    public List<AvailableResponseDTO> findAvailability(
-            @RequestParam(required = false) Integer seats,
-            @RequestParam(required = false) LocalTime hour,
-            @RequestParam Long idRestaurant
-    ) {
+	private final CreateAvailabilityUseCase createAvailabilityUseCase;
 
-        return findAvailabilityUseCase.execute(seats, hour, idRestaurant).stream()
-                .map(mapper::toResponseDTO)
-                .collect(Collectors.toList());
-    }
+	private final AvailableMapper mapper;
 
-    @Operation(summary = "Processar disponibilidade")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Disponibilidade processada",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class))})
-    })
-    @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void process() {
-        createAvailabilityUseCase.execute();
-    }
+	@Operation(summary = "Consultar disponibilidade")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Disponibilidade do restaurante",
+			content = { @Content(mediaType = "application/json",
+					schema = @Schema(implementation = RestaurantResponseDTO.class)) }) })
+	@GetMapping("/find")
+	@ResponseStatus(HttpStatus.OK)
+	public List<AvailableResponseDTO> findAvailability(@RequestParam(required = false) Integer seats,
+			@RequestParam(required = false) LocalTime hour, @RequestParam Long idRestaurant) {
+
+		return findAvailabilityUseCase.execute(seats, hour, idRestaurant)
+			.stream()
+			.map(mapper::toResponseDTO)
+			.collect(Collectors.toList());
+	}
+
+	@Operation(summary = "Processar disponibilidade")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Disponibilidade processada",
+			content = { @Content(mediaType = "application/json",
+					schema = @Schema(implementation = RestaurantResponseDTO.class)) }) })
+	@PostMapping
+	@ResponseStatus(HttpStatus.OK)
+	public void process() {
+		createAvailabilityUseCase.execute();
+	}
+
 }

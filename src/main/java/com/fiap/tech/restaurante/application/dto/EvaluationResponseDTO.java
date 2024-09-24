@@ -13,15 +13,21 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class EvaluationResponseDTO {
-    private Long id;
-    private Long idRestaurant;
-    private Long idReserve;
-    private String evaluation;
-    private int grade;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+	private Long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+	private Long idRestaurant;
+
+	private Long idReserve;
+
+	private String evaluation;
+
+	private int grade;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updatedAt;
+
 }

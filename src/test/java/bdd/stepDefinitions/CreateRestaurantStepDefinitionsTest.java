@@ -24,55 +24,57 @@ import java.util.Objects;
 @CucumberContextConfiguration
 public class CreateRestaurantStepDefinitionsTest {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private RestaurantResponseDTO response;
-    private ErrorDetails errorDetails;
-    private Integer responseStatusCode;
+	private final RestTemplate restTemplate = new RestTemplate();
 
-    @Then("The client receives status code of {int}")
-    public void theClientReceivesStatusCodeOf(int statusCode) {
-        Assert.assertEquals(statusCode, (int) responseStatusCode);
-    }
+	private RestaurantResponseDTO response;
 
-    @NotNull
-    private ResponseEntity<RestaurantResponseDTO> createMockedRestaurant(String restaurantName) {
-        return restTemplate
-                .postForEntity(
-                        "http://localhost:8080/restaurant/create",
-                        RestaurantRequestDTOMock.mock(restaurantName),
-                        RestaurantResponseDTO.class
-                );
-    }
+	private ErrorDetails errorDetails;
 
-    @Given("Exists a restaurant with name {string}")
-    public void existsARestaurantWithName(String restaurantName) {
-        try {
-            createMockedRestaurant(restaurantName);
-        } catch (Exception ex) {
-            System.out.println("Restaurante já cadastrado");
-        }
-    }
+	private Integer responseStatusCode;
 
-    @And("The client receives response body with message {string}")
-    public void theClientReceivesResponseBodyWithMessage(String errorMessage) {
-        Assert.assertEquals(errorMessage, errorDetails.getMessage());
-    }
+	@Then("The client receives status code of {int}")
+	public void theClientReceivesStatusCodeOf(int statusCode) {
+		Assert.assertEquals(statusCode, (int) responseStatusCode);
+	}
 
-    @When("The client calls endpoint to create with valid payload for restaurant {string}")
-    public void theClientCallsEndpointToCreateWithValidPayloadForRestaurant(String restaurantName) {
-        try {
-            var restResponse = createMockedRestaurant(restaurantName);
+	@NotNull
+	private ResponseEntity<RestaurantResponseDTO> createMockedRestaurant(String restaurantName) {
+		return restTemplate.postForEntity("http://localhost:8080/restaurant/create",
+				RestaurantRequestDTOMock.mock(restaurantName), RestaurantResponseDTO.class);
+	}
 
-            response = restResponse.getBody();
-            responseStatusCode = restResponse.getStatusCode().value();
-        } catch (HttpStatusCodeException ex) {
-            errorDetails = ex.getResponseBodyAs(ErrorDetails.class);
-            responseStatusCode = ex.getStatusCode().value();
-        }
-    }
+	@Given("Exists a restaurant with name {string}")
+	public void existsARestaurantWithName(String restaurantName) {
+		try {
+			createMockedRestaurant(restaurantName);
+		}
+		catch (Exception ex) {
+			System.out.println("Restaurante já cadastrado");
+		}
+	}
 
-    @And("The client receives response body with restaurant name {string}")
-    public void theClientReceivesResponseBodyWithRestaurantName(String restaurantName) {
-        Assert.assertEquals(restaurantName, Objects.requireNonNull(response).getName());
-    }
+	@And("The client receives response body with message {string}")
+	public void theClientReceivesResponseBodyWithMessage(String errorMessage) {
+		Assert.assertEquals(errorMessage, errorDetails.getMessage());
+	}
+
+	@When("The client calls endpoint to create with valid payload for restaurant {string}")
+	public void theClientCallsEndpointToCreateWithValidPayloadForRestaurant(String restaurantName) {
+		try {
+			var restResponse = createMockedRestaurant(restaurantName);
+
+			response = restResponse.getBody();
+			responseStatusCode = restResponse.getStatusCode().value();
+		}
+		catch (HttpStatusCodeException ex) {
+			errorDetails = ex.getResponseBodyAs(ErrorDetails.class);
+			responseStatusCode = ex.getStatusCode().value();
+		}
+	}
+
+	@And("The client receives response body with restaurant name {string}")
+	public void theClientReceivesResponseBodyWithRestaurantName(String restaurantName) {
+		Assert.assertEquals(restaurantName, Objects.requireNonNull(response).getName());
+	}
+
 }

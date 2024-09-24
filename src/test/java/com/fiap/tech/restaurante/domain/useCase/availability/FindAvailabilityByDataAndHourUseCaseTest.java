@@ -21,43 +21,47 @@ import static org.mockito.Mockito.*;
 
 class FindAvailabilityByDataAndHourUseCaseTest {
 
-    @InjectMocks
-    private FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
+	@InjectMocks
+	private FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
 
-    @Mock
-    private AvailableRepository availableRepository;
+	@Mock
+	private AvailableRepository availableRepository;
 
-    @Mock
-    private AvailableMapperImpl mapper;
+	@Mock
+	private AvailableMapperImpl mapper;
 
-    private Long restaurantId;
-    private AvailableEntity available;
+	private Long restaurantId;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        restaurantId = 1L;
-        available = new AvailableEntity(1L, restaurantId, LocalDate.now(), LocalTime.of(12, 0), 10, null, null);
-    }
+	private AvailableEntity available;
 
-    @Test
-    void shouldFindAvailabilityByRestaurantIdDateAndHour() {
-        when(availableRepository.findByIdRestaurantAndDateAndHour(any(), any(), any())).thenReturn(Optional.of(available));
-        doCallRealMethod().when(mapper).toDomain(any(AvailableEntity.class));
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+		restaurantId = 1L;
+		available = new AvailableEntity(1L, restaurantId, LocalDate.now(), LocalTime.of(12, 0), 10, null, null);
+	}
 
-        Available result = findAvailabilityByDataAndHourUseCase.execute(restaurantId, LocalDate.now(), LocalTime.of(12, 0));
+	@Test
+	void shouldFindAvailabilityByRestaurantIdDateAndHour() {
+		when(availableRepository.findByIdRestaurantAndDateAndHour(any(), any(), any()))
+			.thenReturn(Optional.of(available));
+		doCallRealMethod().when(mapper).toDomain(any(AvailableEntity.class));
 
-        assertEquals(available.getIdRestaurant(), result.getIdRestaurant());
-        verify(availableRepository).findByIdRestaurantAndDateAndHour(any(), any(), any());
-    }
+		Available result = findAvailabilityByDataAndHourUseCase.execute(restaurantId, LocalDate.now(),
+				LocalTime.of(12, 0));
 
-    @Test
-    void shouldThrowExceptionWhenNoAvailabilityFound() {
-        when(availableRepository.findByIdRestaurantAndDateAndHour(any(), any(), any())).thenReturn(Optional.empty());
+		assertEquals(available.getIdRestaurant(), result.getIdRestaurant());
+		verify(availableRepository).findByIdRestaurantAndDateAndHour(any(), any(), any());
+	}
 
-        UnprocessableEntityException exception = assertThrows(UnprocessableEntityException.class,
-                () -> findAvailabilityByDataAndHourUseCase.execute(restaurantId, LocalDate.now(), LocalTime.of(12, 0)));
+	@Test
+	void shouldThrowExceptionWhenNoAvailabilityFound() {
+		when(availableRepository.findByIdRestaurantAndDateAndHour(any(), any(), any())).thenReturn(Optional.empty());
 
-        assertEquals("Nenhuma disponibilidade encontrada para a data e hora selecionadas", exception.getMessage());
-    }
+		UnprocessableEntityException exception = assertThrows(UnprocessableEntityException.class,
+				() -> findAvailabilityByDataAndHourUseCase.execute(restaurantId, LocalDate.now(), LocalTime.of(12, 0)));
+
+		assertEquals("Nenhuma disponibilidade encontrada para a data e hora selecionadas", exception.getMessage());
+	}
+
 }

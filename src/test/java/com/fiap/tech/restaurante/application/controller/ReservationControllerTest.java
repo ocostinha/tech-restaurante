@@ -25,92 +25,84 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ReservationControllerTest {
-    @InjectMocks
-    private ReservationController reservationController;
 
-    @Mock
-    private UpdateReservationUseCase updateReservationUseCase;
+	@InjectMocks
+	private ReservationController reservationController;
 
-    @Mock
-    private ReservationMapperImpl reservationMapper;
+	@Mock
+	private UpdateReservationUseCase updateReservationUseCase;
 
-    @Mock
-    private FindReservationByIdUseCase findReservationByIdUseCase;
+	@Mock
+	private ReservationMapperImpl reservationMapper;
 
-    private Reservation reservation;
-    private ReservationResponseDTO responseReservationDTO;
-    private ReservationRequestDTO requestReservationDTO;
+	@Mock
+	private FindReservationByIdUseCase findReservationByIdUseCase;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+	private Reservation reservation;
 
-        Long restaurantId = 1L;
-        Long reservationId = 1L;
-        String ownerName = "nome teste";
-        String ownerEmail = "test@test.com";
-        LocalDate reservationDate = LocalDate.now();
-        LocalTime reservationHour = LocalTime.of(12, 0);
-        int numberOfSeats = 5;
-        ReservationStatus status = ReservationStatus.CONFIRMED;
+	private ReservationResponseDTO responseReservationDTO;
 
+	private ReservationRequestDTO requestReservationDTO;
 
-        requestReservationDTO = new ReservationRequestDTO(restaurantId, ownerName, ownerEmail, reservationDate, "12:00", numberOfSeats);
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
 
-        reservation = new Reservation(
-                reservationId,
-                restaurantId,
-                ownerName,
-                ownerEmail,
-                reservationDate,
-                reservationHour,
-                numberOfSeats,
-                status,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+		Long restaurantId = 1L;
+		Long reservationId = 1L;
+		String ownerName = "nome teste";
+		String ownerEmail = "test@test.com";
+		LocalDate reservationDate = LocalDate.now();
+		LocalTime reservationHour = LocalTime.of(12, 0);
+		int numberOfSeats = 5;
+		ReservationStatus status = ReservationStatus.CONFIRMED;
 
-        responseReservationDTO = ReservationResponseDTOMock.mock();
-    }
+		requestReservationDTO = new ReservationRequestDTO(restaurantId, ownerName, ownerEmail, reservationDate, "12:00",
+				numberOfSeats);
 
-    @Test
-    void shouldUpdateReservationSuccessfully() {
-        when(updateReservationUseCase.execute(anyLong(), any(Reservation.class))).thenReturn(reservation);
-        doCallRealMethod().when(reservationMapper).toResponseDTO(any(Reservation.class));
-        doCallRealMethod().when(reservationMapper).toDomain(any(ReservationRequestDTO.class));
+		reservation = new Reservation(reservationId, restaurantId, ownerName, ownerEmail, reservationDate,
+				reservationHour, numberOfSeats, status, LocalDateTime.now(), LocalDateTime.now());
 
-        ReservationResponseDTO result = reservationController.updateReservation(
-                1L,
-                requestReservationDTO
-        );
+		responseReservationDTO = ReservationResponseDTOMock.mock();
+	}
 
-        assertEquals(responseReservationDTO.getId(), result.getId());
+	@Test
+	void shouldUpdateReservationSuccessfully() {
+		when(updateReservationUseCase.execute(anyLong(), any(Reservation.class))).thenReturn(reservation);
+		doCallRealMethod().when(reservationMapper).toResponseDTO(any(Reservation.class));
+		doCallRealMethod().when(reservationMapper).toDomain(any(ReservationRequestDTO.class));
 
-        verify(updateReservationUseCase).execute(any(), any(Reservation.class));
-        verify(reservationMapper).toResponseDTO(any(Reservation.class));
-    }
+		ReservationResponseDTO result = reservationController.updateReservation(1L, requestReservationDTO);
 
-    @Test
-    void findReservationById_ShouldReturnResponseReservationDTO_WhenReservationExists() {
-        when(findReservationByIdUseCase.execute(1L)).thenReturn(reservation);
-        when(reservationMapper.toResponseDTO(reservation)).thenReturn(responseReservationDTO);
+		assertEquals(responseReservationDTO.getId(), result.getId());
 
-        ReservationResponseDTO result = reservationController.findReservationById(1L);
+		verify(updateReservationUseCase).execute(any(), any(Reservation.class));
+		verify(reservationMapper).toResponseDTO(any(Reservation.class));
+	}
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(findReservationByIdUseCase, times(1)).execute(1L);
-        verify(reservationMapper, times(1)).toResponseDTO(reservation);
-    }
+	@Test
+	void findReservationById_ShouldReturnResponseReservationDTO_WhenReservationExists() {
+		when(findReservationByIdUseCase.execute(1L)).thenReturn(reservation);
+		when(reservationMapper.toResponseDTO(reservation)).thenReturn(responseReservationDTO);
 
-    @Test
-    void findReservationById_ShouldThrowResponseStatusException_WhenReservationDoesNotExist() {
-        when(findReservationByIdUseCase.execute(2L)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+		ReservationResponseDTO result = reservationController.findReservationById(1L);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> reservationController.findReservationById(2L));
+		assertNotNull(result);
+		assertEquals(1L, result.getId());
+		verify(findReservationByIdUseCase, times(1)).execute(1L);
+		verify(reservationMapper, times(1)).toResponseDTO(reservation);
+	}
 
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        verify(findReservationByIdUseCase, times(1)).execute(2L);
-        verify(reservationMapper, never()).toResponseDTO(any());
-    }
+	@Test
+	void findReservationById_ShouldThrowResponseStatusException_WhenReservationDoesNotExist() {
+		when(findReservationByIdUseCase.execute(2L)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+				() -> reservationController.findReservationById(2L));
+
+		assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+		verify(findReservationByIdUseCase, times(1)).execute(2L);
+		verify(reservationMapper, never()).toResponseDTO(any());
+	}
+
 }

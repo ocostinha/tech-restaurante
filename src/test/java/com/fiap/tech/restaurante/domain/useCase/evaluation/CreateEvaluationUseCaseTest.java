@@ -23,73 +23,79 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class CreateEvaluationUseCaseTest {
 
-    @InjectMocks
-    private CreateEvaluationUseCase createEvaluationUseCase;
+	@InjectMocks
+	private CreateEvaluationUseCase createEvaluationUseCase;
 
-    @Mock
-    private EvaluationRepository evaluationRepository;
+	@Mock
+	private EvaluationRepository evaluationRepository;
 
-    @Mock
-    private FindReservationByIdUseCase findReservationByIdUseCase;
+	@Mock
+	private FindReservationByIdUseCase findReservationByIdUseCase;
 
-    @Mock
-    private EvaluationMapper evaluationMapper;
+	@Mock
+	private EvaluationMapper evaluationMapper;
 
-    private Evaluation evaluation;
-    private Reservation reservation;
-    private EvaluationEntity evaluationEntity;
+	private Evaluation evaluation;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
+	private Reservation reservation;
 
-        evaluation = new Evaluation(1L, 1L, 1L, "Ótimo restaurante", 5, null, null);
-        reservation = new Reservation(1L, 1L, "John Doe", "john@example.com", null, null, 4, ReservationStatus.COMPLETED, null, null);
-        evaluationEntity = new EvaluationEntity(1L, 1L, 1L, "Ótimo restaurante", 5, null, null);
-    }
+	private EvaluationEntity evaluationEntity;
 
-    @Test
-    void shouldCreateEvaluationSuccessfully() {
-        when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
-        when(evaluationRepository.findByIdReserve(evaluation.getIdReserve())).thenReturn(Optional.empty());
-        when(evaluationMapper.toEntity(any(Evaluation.class))).thenReturn(evaluationEntity);
-        when(evaluationRepository.save(evaluationEntity)).thenReturn(evaluationEntity);
-        when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
 
-        Evaluation result = createEvaluationUseCase.execute(evaluation);
+		evaluation = new Evaluation(1L, 1L, 1L, "Ótimo restaurante", 5, null, null);
+		reservation = new Reservation(1L, 1L, "John Doe", "john@example.com", null, null, 4,
+				ReservationStatus.COMPLETED, null, null);
+		evaluationEntity = new EvaluationEntity(1L, 1L, 1L, "Ótimo restaurante", 5, null, null);
+	}
 
-        assertEquals(evaluation.getId(), result.getId());
+	@Test
+	void shouldCreateEvaluationSuccessfully() {
+		when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
+		when(evaluationRepository.findByIdReserve(evaluation.getIdReserve())).thenReturn(Optional.empty());
+		when(evaluationMapper.toEntity(any(Evaluation.class))).thenReturn(evaluationEntity);
+		when(evaluationRepository.save(evaluationEntity)).thenReturn(evaluationEntity);
+		when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
 
-        verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
-        verify(evaluationRepository).findByIdReserve(evaluation.getIdReserve());
-        verify(evaluationRepository).save(evaluationEntity);
-    }
+		Evaluation result = createEvaluationUseCase.execute(evaluation);
 
-    @Test
-    void shouldThrowBusinessExceptionWhenReservationNotCompleted() {
-        reservation.setStatus(ReservationStatus.CONFIRMED);
-        when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
+		assertEquals(evaluation.getId(), result.getId());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> createEvaluationUseCase.execute(evaluation));
+		verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
+		verify(evaluationRepository).findByIdReserve(evaluation.getIdReserve());
+		verify(evaluationRepository).save(evaluationEntity);
+	}
 
-        assertEquals("Apenas reservas que foram completas podem ser avaliadas", exception.getMessage());
+	@Test
+	void shouldThrowBusinessExceptionWhenReservationNotCompleted() {
+		reservation.setStatus(ReservationStatus.CONFIRMED);
+		when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
 
-        verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
-        verify(evaluationRepository, never()).findByIdReserve(any());
-        verify(evaluationRepository, never()).save(any());
-    }
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> createEvaluationUseCase.execute(evaluation));
 
-    @Test
-    void shouldThrowBusinessExceptionWhenEvaluationAlreadyExistsForReserve() {
-        when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
-        when(evaluationRepository.findByIdReserve(evaluation.getIdReserve())).thenReturn(Optional.of(evaluationEntity));
+		assertEquals("Apenas reservas que foram completas podem ser avaliadas", exception.getMessage());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> createEvaluationUseCase.execute(evaluation));
+		verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
+		verify(evaluationRepository, never()).findByIdReserve(any());
+		verify(evaluationRepository, never()).save(any());
+	}
 
-        assertEquals("Apenas uma avaliação pode ser realizada para esta reserva", exception.getMessage());
+	@Test
+	void shouldThrowBusinessExceptionWhenEvaluationAlreadyExistsForReserve() {
+		when(findReservationByIdUseCase.execute(evaluation.getIdRestaurant())).thenReturn(reservation);
+		when(evaluationRepository.findByIdReserve(evaluation.getIdReserve())).thenReturn(Optional.of(evaluationEntity));
 
-        verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
-        verify(evaluationRepository).findByIdReserve(evaluation.getIdReserve());
-        verify(evaluationRepository, never()).save(any());
-    }
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> createEvaluationUseCase.execute(evaluation));
+
+		assertEquals("Apenas uma avaliação pode ser realizada para esta reserva", exception.getMessage());
+
+		verify(findReservationByIdUseCase).execute(evaluation.getIdRestaurant());
+		verify(evaluationRepository).findByIdReserve(evaluation.getIdReserve());
+		verify(evaluationRepository, never()).save(any());
+	}
+
 }

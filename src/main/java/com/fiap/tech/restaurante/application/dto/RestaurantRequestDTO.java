@@ -10,44 +10,45 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class RestaurantRequestDTO {
-    @NotNull
-    public String name;
 
-    @NotNull
-    public String address;
+	@NotNull
+	public String name;
 
-    @NotNull
-    public int number;
+	@NotNull
+	public String address;
 
-    @NotNull
-    public String neighborhood;
+	@NotNull
+	public int number;
 
-    @NotNull
-    public String city;
+	@NotNull
+	public String neighborhood;
 
-    @NotNull
-    public String state;
+	@NotNull
+	public String city;
 
-    @NotNull
-    public String cuisineType;
+	@NotNull
+	public String state;
 
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    public String openAt;
+	@NotNull
+	public String cuisineType;
 
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    public String closeAt;
+	@NotNull
+	@JsonFormat(pattern = "HH:mm")
+	public String openAt;
 
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    public String intervalStart;
+	@NotNull
+	@JsonFormat(pattern = "HH:mm")
+	public String closeAt;
 
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    public String intervalFinish;
+	@NotNull
+	@JsonFormat(pattern = "HH:mm")
+	public String intervalStart;
 
-    @NotNull
-    public int numberOfSeats;
+	@NotNull
+	@JsonFormat(pattern = "HH:mm")
+	public String intervalFinish;
+
+	@NotNull
+	public int numberOfSeats;
+
 }
-

@@ -12,20 +12,20 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FindReservationByIdUseCase {
 
-    private final ReservationRepository repository;
-    private final ReservationMapper mapper;
+	private final ReservationRepository repository;
 
-    public Reservation execute(Long id) {
-        validateReservationId(id);
-        return mapper.toDomain(
-                repository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"))
-        );
-    }
+	private final ReservationMapper mapper;
 
-    private void validateReservationId(Long id) {
-        if (id == null) {
-            throw new UnprocessableEntityException("O id da reserva não pode ser nulo");
-        }
-    }
+	public Reservation execute(Long id) {
+		validateReservationId(id);
+		return mapper.toDomain(
+				repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada")));
+	}
+
+	private void validateReservationId(Long id) {
+		if (id == null) {
+			throw new UnprocessableEntityException("O id da reserva não pode ser nulo");
+		}
+	}
+
 }

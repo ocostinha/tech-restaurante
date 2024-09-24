@@ -12,19 +12,35 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder
 public class Restaurant {
-    private Long id;
-    private String name;
-    private String address;
-    private int number;
-    private String neighborhood;
-    private String city;
-    private String state;
-    private String cuisineType;
-    private LocalTime openAt;
-    private LocalTime closeAt;
-    private LocalTime intervalStart;
-    private LocalTime intervalFinish;
-    private int numberOfSeats;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+	private Long id;
+
+	private String name;
+
+	private String address;
+
+	private int number;
+
+	private String neighborhood;
+
+	private String city;
+
+	private String state;
+
+	private String cuisineType;
+
+	private LocalTime openAt;
+
+	private LocalTime closeAt;
+
+	private LocalTime intervalStart;
+
+	private LocalTime intervalFinish;
+
+	private int numberOfSeats;
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
+
 }

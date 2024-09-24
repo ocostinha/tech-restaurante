@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FindRestaurantByIdUseCase {
 
-    private RestaurantRepository restaurantRepository;
-    private RestaurantMapper mapper;
+	private RestaurantRepository restaurantRepository;
 
-    public Restaurant execute(Long id) {
-        return mapper.toDomain(
-                restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado"))
-        );
-    }
+	private RestaurantMapper mapper;
+
+	public Restaurant execute(Long id) {
+		return mapper.toDomain(restaurantRepository.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado")));
+	}
+
 }
-

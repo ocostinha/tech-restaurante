@@ -14,33 +14,36 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class CreateAvailabilityUseCase {
-    private final RestaurantRepository restaurantRepository;
-    private final AvailableRepository availableRepository;
 
-    public void execute() {
-        List<RestaurantEntity> restaurants = restaurantRepository.findAll();
-        LocalDate reservationDate = LocalDate.now().plusDays(1);
+	private final RestaurantRepository restaurantRepository;
 
-        for (RestaurantEntity restaurant : restaurants) {
-            int totalSeats = restaurant.getNumberOfSeats();
-            int initialAvailability = (int) (totalSeats * 0.9);
+	private final AvailableRepository availableRepository;
 
-            LocalTime openingTime = restaurant.getOpenAt();
-            LocalTime closingTime = restaurant.getCloseAt();
+	public void execute() {
+		List<RestaurantEntity> restaurants = restaurantRepository.findAll();
+		LocalDate reservationDate = LocalDate.now().plusDays(1);
 
-            for (LocalTime time = openingTime; time.isBefore(closingTime); time = time.plusHours(1)) {
-                if (time.isBefore(restaurant.getIntervalStart()) ||
-                        time.isAfter(restaurant.getIntervalFinish().minusHours(1))) {
-                    AvailableEntity availableEntity = new AvailableEntity();
+		for (RestaurantEntity restaurant : restaurants) {
+			int totalSeats = restaurant.getNumberOfSeats();
+			int initialAvailability = (int) (totalSeats * 0.9);
 
-                    availableEntity.setIdRestaurant(restaurant.getId());
-                    availableEntity.setDate(reservationDate);
-                    availableEntity.setHour(time);
-                    availableEntity.setAvailableSeats(initialAvailability);
+			LocalTime openingTime = restaurant.getOpenAt();
+			LocalTime closingTime = restaurant.getCloseAt();
 
-                    availableRepository.save(availableEntity);
-                }
-            }
-        }
-    }
+			for (LocalTime time = openingTime; time.isBefore(closingTime); time = time.plusHours(1)) {
+				if (time.isBefore(restaurant.getIntervalStart())
+						|| time.isAfter(restaurant.getIntervalFinish().minusHours(1))) {
+					AvailableEntity availableEntity = new AvailableEntity();
+
+					availableEntity.setIdRestaurant(restaurant.getId());
+					availableEntity.setDate(reservationDate);
+					availableEntity.setHour(time);
+					availableEntity.setAvailableSeats(initialAvailability);
+
+					availableRepository.save(availableEntity);
+				}
+			}
+		}
+	}
+
 }

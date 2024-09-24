@@ -21,76 +21,79 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class CompleteReservationUseCaseTest {
 
-    @InjectMocks
-    private CompleteReservationUseCase completeReservationUseCase;
+	@InjectMocks
+	private CompleteReservationUseCase completeReservationUseCase;
 
-    @Mock
-    private ReservationRepository reservationRepository;
+	@Mock
+	private ReservationRepository reservationRepository;
 
-    @Mock
-    private ReservationMapper reservationMapper;
+	@Mock
+	private ReservationMapper reservationMapper;
 
-    private ReservationEntity reservationEntity;
-    private Reservation reservation;
+	private ReservationEntity reservationEntity;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
+	private Reservation reservation;
 
-        reservationEntity = ReservationEntity.builder()
-                .id(1L)
-                .idRestaurant(1L)
-                .reservationOwnerName("Test Owner")
-                .reservationOwnerEmail("owner@test.com")
-                .reservationDate(null)
-                .reservationHour(null)
-                .seatsReserved(4)
-                .status(ReservationStatus.CONFIRMED)
-                .build();
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
 
-        reservation = Reservation.builder()
-                .id(1L)
-                .idRestaurant(1L)
-                .reservationOwnerName("Test Owner")
-                .reservationOwnerEmail("owner@test.com")
-                .seatsReserved(4)
-                .status(ReservationStatus.COMPLETED)
-                .build();
-    }
+		reservationEntity = ReservationEntity.builder()
+			.id(1L)
+			.idRestaurant(1L)
+			.reservationOwnerName("Test Owner")
+			.reservationOwnerEmail("owner@test.com")
+			.reservationDate(null)
+			.reservationHour(null)
+			.seatsReserved(4)
+			.status(ReservationStatus.CONFIRMED)
+			.build();
 
-    @Test
-    void shouldCompleteReservationSuccessfully() {
-        when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservationEntity));
-        when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
-        when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
+		reservation = Reservation.builder()
+			.id(1L)
+			.idRestaurant(1L)
+			.reservationOwnerName("Test Owner")
+			.reservationOwnerEmail("owner@test.com")
+			.seatsReserved(4)
+			.status(ReservationStatus.COMPLETED)
+			.build();
+	}
 
-        Reservation result = completeReservationUseCase.execute(1L);
+	@Test
+	void shouldCompleteReservationSuccessfully() {
+		when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservationEntity));
+		when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
+		when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
-        assertEquals(ReservationStatus.COMPLETED, result.getStatus());
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository).save(reservationEntity);
-        verify(reservationMapper).toDomain(reservationEntity);
-    }
+		Reservation result = completeReservationUseCase.execute(1L);
 
-    @Test
-    void shouldThrowBusinessExceptionWhenReservationNotFound() {
-        when(reservationRepository.findById(anyLong())).thenReturn(Optional.empty());
+		assertEquals(ReservationStatus.COMPLETED, result.getStatus());
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository).save(reservationEntity);
+		verify(reservationMapper).toDomain(reservationEntity);
+	}
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> completeReservationUseCase.execute(1L));
+	@Test
+	void shouldThrowBusinessExceptionWhenReservationNotFound() {
+		when(reservationRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertEquals("Reserva não encontrada", exception.getMessage());
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository, never()).save(any(ReservationEntity.class));
-        verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
-    }
+		BusinessException exception = assertThrows(BusinessException.class,
+				() -> completeReservationUseCase.execute(1L));
 
-    @Test
-    void shouldThrowExceptionWhenReservationNotFound() {
-        when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
+		assertEquals("Reserva não encontrada", exception.getMessage());
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository, never()).save(any(ReservationEntity.class));
+		verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
+	}
 
-        assertThrows(BusinessException.class, () -> completeReservationUseCase.execute(1L));
+	@Test
+	void shouldThrowExceptionWhenReservationNotFound() {
+		when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
 
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository, never()).save(any());
-    }
+		assertThrows(BusinessException.class, () -> completeReservationUseCase.execute(1L));
+
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository, never()).save(any());
+	}
+
 }

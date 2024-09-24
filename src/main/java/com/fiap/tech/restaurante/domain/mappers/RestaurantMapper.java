@@ -11,22 +11,22 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    Restaurant toDomain(RestaurantRequestDTO dto);
+	@Mapping(target = "updatedAt", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	Restaurant toDomain(RestaurantRequestDTO dto);
 
-    Restaurant toDomain(RestaurantEntity entity);
+	Restaurant toDomain(RestaurantEntity entity);
 
-    RestaurantResponseDTO toResponse(Restaurant domain);
+	RestaurantResponseDTO toResponse(Restaurant domain);
 
-    RestaurantEntity toEntity(Restaurant domain);
+	RestaurantEntity toEntity(Restaurant domain);
 
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "openAt", source = "openAt")
-    @Mapping(target = "closeAt", source = "closeAt")
-    RestaurantEntity update(Restaurant domain, @MappingTarget RestaurantEntity entity);
+	@Mapping(target = "updatedAt", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "openAt", source = "openAt")
+	@Mapping(target = "closeAt", source = "closeAt")
+	RestaurantEntity update(Restaurant domain, @MappingTarget RestaurantEntity entity);
+
 }
-

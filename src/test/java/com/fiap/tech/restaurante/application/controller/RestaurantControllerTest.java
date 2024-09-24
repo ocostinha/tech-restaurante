@@ -24,135 +24,145 @@ import static org.mockito.Mockito.*;
 
 class RestaurantControllerTest {
 
-    @InjectMocks
-    private RestaurantController restaurantController;
+	@InjectMocks
+	private RestaurantController restaurantController;
 
-    @Mock
-    private CreateRestaurantUseCase createRestaurantUseCase;
+	@Mock
+	private CreateRestaurantUseCase createRestaurantUseCase;
 
-    @Mock
-    private UpdateRestaurantUseCase updateRestaurantUseCase;
+	@Mock
+	private UpdateRestaurantUseCase updateRestaurantUseCase;
 
-    @Mock
-    private FindRestaurantUseCase findRestaurantUseCase;
+	@Mock
+	private FindRestaurantUseCase findRestaurantUseCase;
 
-    @Mock
-    private FindRestaurantByIdUseCase findRestaurantByIdUseCase;
+	@Mock
+	private FindRestaurantByIdUseCase findRestaurantByIdUseCase;
 
-    @Mock
-    private DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
+	@Mock
+	private DeleteRestaurantByIdUseCase deleteRestaurantByIdUseCase;
 
-    @Mock
-    private RestaurantMapper restaurantMapper;
+	@Mock
+	private RestaurantMapper restaurantMapper;
 
-    private RestaurantRequestDTO requestDTO;
-    private RestaurantResponseDTO responseDTO;
-    private Restaurant restaurant;
+	private RestaurantRequestDTO requestDTO;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+	private RestaurantResponseDTO responseDTO;
 
-        requestDTO = new RestaurantRequestDTO("Teste Restaurante", "Rua Teste", 123, "Bairro Teste", "Cidade Teste", "SP", "Italiana", "08:00", "22:00", "15:00", "17:00", 50);
+	private Restaurant restaurant;
 
-        restaurant = new Restaurant(1L, "Teste Restaurante", "Rua Teste", 123, "Bairro Teste", "Cidade Teste", "SP", "Italiana", LocalTime.of(8, 0), LocalTime.of(22, 0), LocalTime.of(15, 0), LocalTime.of(17, 0), 50, LocalDateTime.now(), LocalDateTime.now());
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
 
-        responseDTO = new RestaurantResponseDTO();
-        responseDTO.setId(1L);
-        responseDTO.setName("Teste Restaurante");
-        responseDTO.setAddress("Rua Teste");
-        responseDTO.setNumber(123);
-        responseDTO.setNeighborhood("Bairro Teste");
-        responseDTO.setCity("Cidade Teste");
-        responseDTO.setState("SP");
-        responseDTO.setCuisineType("Italiana");
-        responseDTO.setOpenAt(LocalTime.of(8, 0));
-        responseDTO.setCloseAt(LocalTime.of(22, 0));
-        responseDTO.setIntervalStart(LocalTime.of(15, 0));
-        responseDTO.setIntervalFinish(LocalTime.of(17, 0));
-        responseDTO.setNumberOfSeats(50);
-        responseDTO.setCreatedAt(LocalDateTime.now());
-        responseDTO.setUpdatedAt(LocalDateTime.now());
-    }
+		requestDTO = new RestaurantRequestDTO("Teste Restaurante", "Rua Teste", 123, "Bairro Teste", "Cidade Teste",
+				"SP", "Italiana", "08:00", "22:00", "15:00", "17:00", 50);
 
-    @Test
-    void shouldCreateRestaurantSuccessfully() {
-        when(createRestaurantUseCase.execute(any(Restaurant.class))).thenReturn(restaurant);
-        when(restaurantMapper.toDomain(any(RestaurantRequestDTO.class))).thenReturn(restaurant);
-        when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
+		restaurant = new Restaurant(1L, "Teste Restaurante", "Rua Teste", 123, "Bairro Teste", "Cidade Teste", "SP",
+				"Italiana", LocalTime.of(8, 0), LocalTime.of(22, 0), LocalTime.of(15, 0), LocalTime.of(17, 0), 50,
+				LocalDateTime.now(), LocalDateTime.now());
 
-        RestaurantResponseDTO result = restaurantController.createRestaurant(requestDTO);
+		responseDTO = new RestaurantResponseDTO();
+		responseDTO.setId(1L);
+		responseDTO.setName("Teste Restaurante");
+		responseDTO.setAddress("Rua Teste");
+		responseDTO.setNumber(123);
+		responseDTO.setNeighborhood("Bairro Teste");
+		responseDTO.setCity("Cidade Teste");
+		responseDTO.setState("SP");
+		responseDTO.setCuisineType("Italiana");
+		responseDTO.setOpenAt(LocalTime.of(8, 0));
+		responseDTO.setCloseAt(LocalTime.of(22, 0));
+		responseDTO.setIntervalStart(LocalTime.of(15, 0));
+		responseDTO.setIntervalFinish(LocalTime.of(17, 0));
+		responseDTO.setNumberOfSeats(50);
+		responseDTO.setCreatedAt(LocalDateTime.now());
+		responseDTO.setUpdatedAt(LocalDateTime.now());
+	}
 
-        assertNotNull(result);
-        assertEquals(responseDTO.getId(), result.getId());
-        assertEquals(responseDTO.getName(), result.getName());
+	@Test
+	void shouldCreateRestaurantSuccessfully() {
+		when(createRestaurantUseCase.execute(any(Restaurant.class))).thenReturn(restaurant);
+		when(restaurantMapper.toDomain(any(RestaurantRequestDTO.class))).thenReturn(restaurant);
+		when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
 
-        verify(createRestaurantUseCase).execute(any(Restaurant.class));
-        verify(restaurantMapper).toDomain(any(RestaurantRequestDTO.class));
-        verify(restaurantMapper).toResponse(any(Restaurant.class));
-    }
+		RestaurantResponseDTO result = restaurantController.createRestaurant(requestDTO);
 
-    @Test
-    void shouldUpdateRestaurantSuccessfully() {
-        when(updateRestaurantUseCase.execute(anyLong(), any(Restaurant.class))).thenReturn(restaurant);
-        when(restaurantMapper.toDomain(any(RestaurantRequestDTO.class))).thenReturn(restaurant);
-        when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
+		assertNotNull(result);
+		assertEquals(responseDTO.getId(), result.getId());
+		assertEquals(responseDTO.getName(), result.getName());
 
-        RestaurantResponseDTO result = restaurantController.editRestaurant(1L, requestDTO);
+		verify(createRestaurantUseCase).execute(any(Restaurant.class));
+		verify(restaurantMapper).toDomain(any(RestaurantRequestDTO.class));
+		verify(restaurantMapper).toResponse(any(Restaurant.class));
+	}
 
-        assertNotNull(result);
-        assertEquals(responseDTO.getId(), result.getId());
-        assertEquals(responseDTO.getName(), result.getName());
+	@Test
+	void shouldUpdateRestaurantSuccessfully() {
+		when(updateRestaurantUseCase.execute(anyLong(), any(Restaurant.class))).thenReturn(restaurant);
+		when(restaurantMapper.toDomain(any(RestaurantRequestDTO.class))).thenReturn(restaurant);
+		when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
 
-        verify(updateRestaurantUseCase).execute(anyLong(), any(Restaurant.class));
-        verify(restaurantMapper).toDomain(any(RestaurantRequestDTO.class));
-        verify(restaurantMapper).toResponse(any(Restaurant.class));
-    }
+		RestaurantResponseDTO result = restaurantController.editRestaurant(1L, requestDTO);
 
-    @Test
-    void shouldFindRestaurantByIdSuccessfully() {
-        when(findRestaurantByIdUseCase.execute(anyLong())).thenReturn(restaurant);
-        when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
+		assertNotNull(result);
+		assertEquals(responseDTO.getId(), result.getId());
+		assertEquals(responseDTO.getName(), result.getName());
 
-        RestaurantResponseDTO result = restaurantController.getRestaurant(1L);
+		verify(updateRestaurantUseCase).execute(anyLong(), any(Restaurant.class));
+		verify(restaurantMapper).toDomain(any(RestaurantRequestDTO.class));
+		verify(restaurantMapper).toResponse(any(Restaurant.class));
+	}
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
+	@Test
+	void shouldFindRestaurantByIdSuccessfully() {
+		when(findRestaurantByIdUseCase.execute(anyLong())).thenReturn(restaurant);
+		when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
 
-        verify(findRestaurantByIdUseCase).execute(anyLong());
-        verify(restaurantMapper).toResponse(any(Restaurant.class));
-    }
+		RestaurantResponseDTO result = restaurantController.getRestaurant(1L);
 
-    @Test
-    void shouldThrowExceptionWhenRestaurantNotFound() {
-        when(findRestaurantByIdUseCase.execute(anyLong())).thenThrow(new ResourceNotFoundException("Restaurante não encontrado"));
+		assertNotNull(result);
+		assertEquals(1L, result.getId());
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> restaurantController.getRestaurant(1L));
+		verify(findRestaurantByIdUseCase).execute(anyLong());
+		verify(restaurantMapper).toResponse(any(Restaurant.class));
+	}
 
-        assertEquals("Restaurante não encontrado", exception.getMessage());
-        verify(findRestaurantByIdUseCase).execute(anyLong());
-        verify(restaurantMapper, never()).toResponse(any(Restaurant.class));
-    }
+	@Test
+	void shouldThrowExceptionWhenRestaurantNotFound() {
+		when(findRestaurantByIdUseCase.execute(anyLong()))
+			.thenThrow(new ResourceNotFoundException("Restaurante não encontrado"));
 
-    @Test
-    void shouldDeleteRestaurantSuccessfully() {
-        restaurantController.deleteRestaurant(1L);
+		ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+				() -> restaurantController.getRestaurant(1L));
 
-        verify(deleteRestaurantByIdUseCase).execute(anyLong());
-    }
+		assertEquals("Restaurante não encontrado", exception.getMessage());
+		verify(findRestaurantByIdUseCase).execute(anyLong());
+		verify(restaurantMapper, never()).toResponse(any(Restaurant.class));
+	}
 
-    @Test
-    void shouldFindRestaurantsSuccessfully() {
-        when(findRestaurantUseCase.execute(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(Collections.singletonList(restaurant));
-        when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
+	@Test
+	void shouldDeleteRestaurantSuccessfully() {
+		restaurantController.deleteRestaurant(1L);
 
-        List<RestaurantResponseDTO> result = restaurantController.findRestaurants("name", "neighborhood", "city", "state", "cuisine");
+		verify(deleteRestaurantByIdUseCase).execute(anyLong());
+	}
 
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
+	@Test
+	void shouldFindRestaurantsSuccessfully() {
+		when(findRestaurantUseCase.execute(anyString(), anyString(), anyString(), anyString(), anyString()))
+			.thenReturn(Collections.singletonList(restaurant));
+		when(restaurantMapper.toResponse(any(Restaurant.class))).thenReturn(responseDTO);
 
-        verify(findRestaurantUseCase).execute(anyString(), anyString(), anyString(), anyString(), anyString());
-        verify(restaurantMapper).toResponse(any(Restaurant.class));
-    }
+		List<RestaurantResponseDTO> result = restaurantController.findRestaurants("name", "neighborhood", "city",
+				"state", "cuisine");
+
+		assertNotNull(result);
+		assertFalse(result.isEmpty());
+		assertEquals(1, result.size());
+
+		verify(findRestaurantUseCase).execute(anyString(), anyString(), anyString(), anyString(), anyString());
+		verify(restaurantMapper).toResponse(any(Restaurant.class));
+	}
+
 }

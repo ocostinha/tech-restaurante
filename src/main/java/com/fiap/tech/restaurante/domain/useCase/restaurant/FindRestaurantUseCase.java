@@ -14,29 +14,32 @@ import java.util.List;
 @AllArgsConstructor
 public class FindRestaurantUseCase {
 
-    private RestaurantRepository restaurantRepository;
-    private RestaurantMapper mapper;
+	private RestaurantRepository restaurantRepository;
 
-    public List<Restaurant> execute(String name, String neighborhood, String city, String state, String cuisineType) {
-        Specification<RestaurantEntity> spec = Specification.where(null);
+	private RestaurantMapper mapper;
 
-        if (name != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + name + "%"));
-        }
-        if (neighborhood != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("neighborhood"), "%" + neighborhood + "%"));
-        }
-        if (city != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("city"), "%" + city + "%"));
-        }
-        if (state != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("state"), state));
-        }
-        if (cuisineType != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cuisineType"), "%" + cuisineType + "%"));
-        }
+	public List<Restaurant> execute(String name, String neighborhood, String city, String state, String cuisineType) {
+		Specification<RestaurantEntity> spec = Specification.where(null);
 
-        return restaurantRepository.findAll(spec).stream().map(mapper::toDomain).toList();
-    }
+		if (name != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+		}
+		if (neighborhood != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("neighborhood"),
+					"%" + neighborhood + "%"));
+		}
+		if (city != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("city"), "%" + city + "%"));
+		}
+		if (state != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("state"), state));
+		}
+		if (cuisineType != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cuisineType"),
+					"%" + cuisineType + "%"));
+		}
+
+		return restaurantRepository.findAll(spec).stream().map(mapper::toDomain).toList();
+	}
+
 }
-

@@ -14,17 +14,15 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class FindAvailabilityByDataAndHourUseCase {
 
-    private final AvailableRepository availableRepository;
-    private final AvailableMapper mapper;
+	private final AvailableRepository availableRepository;
 
-    public Available execute(
-            Long idRestaurant,
-            LocalDate reservationDate,
-            LocalTime reservationHour
-    ) {
-        return mapper.toDomain(
-                availableRepository.findByIdRestaurantAndDateAndHour(idRestaurant, reservationDate, reservationHour)
-                        .orElseThrow(() -> new UnprocessableEntityException("Nenhuma disponibilidade encontrada para a data e hora selecionadas"))
-        );
-    }
+	private final AvailableMapper mapper;
+
+	public Available execute(Long idRestaurant, LocalDate reservationDate, LocalTime reservationHour) {
+		return mapper.toDomain(
+				availableRepository.findByIdRestaurantAndDateAndHour(idRestaurant, reservationDate, reservationHour)
+					.orElseThrow(() -> new UnprocessableEntityException(
+							"Nenhuma disponibilidade encontrada para a data e hora selecionadas")));
+	}
+
 }

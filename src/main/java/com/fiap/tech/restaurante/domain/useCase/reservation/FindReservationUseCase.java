@@ -17,35 +17,28 @@ import java.util.List;
 @AllArgsConstructor
 public class FindReservationUseCase {
 
-    private ReservationRepository reservationRepository;
-    private ReservationMapper mapper;
+	private ReservationRepository reservationRepository;
 
-    public List<Reservation> execute(
-            Long idRestaurant,
-            LocalDate date,
-            LocalTime hour,
-            ReservationStatus status
-    ) {
-        Specification<ReservationEntity> spec = Specification.where(null);
+	private ReservationMapper mapper;
 
-        if (idRestaurant != null) {
-            spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idRestaurant"), idRestaurant));
-        }
-        if (date != null) {
-            spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("reservationDate"), date));
-        }
-        if (hour != null) {
-            spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("reservationHour"), hour));
-        }
-        if (status != null) {
-            spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("status"), status));
-        }
+	public List<Reservation> execute(Long idRestaurant, LocalDate date, LocalTime hour, ReservationStatus status) {
+		Specification<ReservationEntity> spec = Specification.where(null);
 
-        return reservationRepository.findAll(spec).stream().map(mapper::toDomain).toList();
-    }
+		if (idRestaurant != null) {
+			spec = spec
+				.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("idRestaurant"), idRestaurant));
+		}
+		if (date != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("reservationDate"), date));
+		}
+		if (hour != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("reservationHour"), hour));
+		}
+		if (status != null) {
+			spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), status));
+		}
+
+		return reservationRepository.findAll(spec).stream().map(mapper::toDomain).toList();
+	}
+
 }
-

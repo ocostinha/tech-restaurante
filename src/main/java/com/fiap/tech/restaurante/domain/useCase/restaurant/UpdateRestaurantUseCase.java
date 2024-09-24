@@ -11,27 +11,22 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UpdateRestaurantUseCase {
 
-    private RestaurantRepository restaurantRepository;
-    private RestaurantMapper mapper;
+	private RestaurantRepository restaurantRepository;
 
-    public Restaurant execute(Long idRestaurant, Restaurant restaurant) {
-        checkBusinessRules(restaurant.getName());
+	private RestaurantMapper mapper;
 
-        return mapper.toDomain(
-                restaurantRepository.save(
-                        mapper.update(
-                                restaurant,
-                                restaurantRepository.findById(idRestaurant)
-                                        .orElseThrow(() -> new BusinessException("Restaurante não encontrado"))
-                        )
-                )
-        );
-    }
+	public Restaurant execute(Long idRestaurant, Restaurant restaurant) {
+		checkBusinessRules(restaurant.getName());
 
-    private void checkBusinessRules(String name) {
-        if (restaurantRepository.findByName(name).isPresent()) {
-            throw new BusinessException("Já existe um restaurante com esse nome na plataforma.");
-        }
-    }
+		return mapper
+			.toDomain(restaurantRepository.save(mapper.update(restaurant, restaurantRepository.findById(idRestaurant)
+				.orElseThrow(() -> new BusinessException("Restaurante não encontrado")))));
+	}
+
+	private void checkBusinessRules(String name) {
+		if (restaurantRepository.findByName(name).isPresent()) {
+			throw new BusinessException("Já existe um restaurante com esse nome na plataforma.");
+		}
+	}
+
 }
-

@@ -26,85 +26,88 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class CancelReservationUseCaseTest {
 
-    @InjectMocks
-    private CancelReservationUseCase cancelReservationUseCase;
+	@InjectMocks
+	private CancelReservationUseCase cancelReservationUseCase;
 
-    @Mock
-    private ReservationRepository reservationRepository;
+	@Mock
+	private ReservationRepository reservationRepository;
 
-    @Mock
-    private UpdateAvailableUseCase updateAvailableUseCase;
+	@Mock
+	private UpdateAvailableUseCase updateAvailableUseCase;
 
-    @Mock
-    private ReservationMapper reservationMapper;
+	@Mock
+	private ReservationMapper reservationMapper;
 
-    private ReservationEntity reservationEntity;
-    private Reservation reservation;
+	private ReservationEntity reservationEntity;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
+	private Reservation reservation;
 
-        reservationEntity = ReservationEntity.builder()
-                .id(1L)
-                .idRestaurant(1L)
-                .seatsReserved(4)
-                .status(ReservationStatus.CONFIRMED)
-                .reservationDate(LocalDate.now())
-                .reservationHour(LocalTime.of(12, 0))
-                .build();
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
 
-        reservation = new Reservation(1L, 1L, "Test Test", "test@teste.com", reservationEntity.getReservationDate(), reservationEntity.getReservationHour(), reservationEntity.getSeatsReserved(), ReservationStatus.CANCELED, null, null);
+		reservationEntity = ReservationEntity.builder()
+			.id(1L)
+			.idRestaurant(1L)
+			.seatsReserved(4)
+			.status(ReservationStatus.CONFIRMED)
+			.reservationDate(LocalDate.now())
+			.reservationHour(LocalTime.of(12, 0))
+			.build();
 
-        reservation = Reservation.builder()
-                .id(1L)
-                .idRestaurant(1L)
-                .reservationOwnerName("Test Owner")
-                .reservationOwnerEmail("owner@test.com")
-                .seatsReserved(4)
-                .status(ReservationStatus.CANCELED)
-                .build();
-    }
+		reservation = new Reservation(1L, 1L, "Test Test", "test@teste.com", reservationEntity.getReservationDate(),
+				reservationEntity.getReservationHour(), reservationEntity.getSeatsReserved(),
+				ReservationStatus.CANCELED, null, null);
 
-    @Test
-    void shouldCancelReservationSuccessfully() {
-        when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservationEntity));
-        when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
-        when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
+		reservation = Reservation.builder()
+			.id(1L)
+			.idRestaurant(1L)
+			.reservationOwnerName("Test Owner")
+			.reservationOwnerEmail("owner@test.com")
+			.seatsReserved(4)
+			.status(ReservationStatus.CANCELED)
+			.build();
+	}
 
-        Reservation result = cancelReservationUseCase.execute(1L);
+	@Test
+	void shouldCancelReservationSuccessfully() {
+		when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservationEntity));
+		when(reservationRepository.save(any(ReservationEntity.class))).thenReturn(reservationEntity);
+		when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
-        assertEquals(ReservationStatus.CANCELED, result.getStatus());
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository).save(reservationEntity);
-        verify(updateAvailableUseCase).execute(
-                reservationEntity.getIdRestaurant(),
-                reservationEntity.getSeatsReserved(),
-                reservationEntity.getReservationDate(),
-                reservationEntity.getReservationHour()
-        );
-    }
+		Reservation result = cancelReservationUseCase.execute(1L);
 
-    @Test
-    void shouldThrowResourceNotFoundExceptionWhenReservationDoesNotExist() {
-        when(reservationRepository.findById(anyLong())).thenReturn(Optional.empty());
+		assertEquals(ReservationStatus.CANCELED, result.getStatus());
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository).save(reservationEntity);
+		verify(updateAvailableUseCase).execute(reservationEntity.getIdRestaurant(),
+				reservationEntity.getSeatsReserved(), reservationEntity.getReservationDate(),
+				reservationEntity.getReservationHour());
+	}
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> cancelReservationUseCase.execute(1L));
+	@Test
+	void shouldThrowResourceNotFoundExceptionWhenReservationDoesNotExist() {
+		when(reservationRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertEquals("Reserva não encontrada", exception.getMessage());
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository, never()).save(any(ReservationEntity.class));
-        verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(LocalDate.class), any(LocalTime.class));
-    }
+		ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+				() -> cancelReservationUseCase.execute(1L));
 
-    @Test
-    void shouldThrowExceptionWhenReservationNotFound() {
-        when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
+		assertEquals("Reserva não encontrada", exception.getMessage());
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository, never()).save(any(ReservationEntity.class));
+		verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(LocalDate.class),
+				any(LocalTime.class));
+	}
 
-        assertThrows(ResourceNotFoundException.class, () -> cancelReservationUseCase.execute(1L));
+	@Test
+	void shouldThrowExceptionWhenReservationNotFound() {
+		when(reservationRepository.findById(1L)).thenReturn(Optional.empty());
 
-        verify(reservationRepository).findById(1L);
-        verify(reservationRepository, never()).save(any());
-        verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(), any());
-    }
+		assertThrows(ResourceNotFoundException.class, () -> cancelReservationUseCase.execute(1L));
+
+		verify(reservationRepository).findById(1L);
+		verify(reservationRepository, never()).save(any());
+		verify(updateAvailableUseCase, never()).execute(anyLong(), anyInt(), any(), any());
+	}
+
 }

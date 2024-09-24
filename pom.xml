@@ -159,7 +159,7 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>io/truongbn/github/jacoco/JacocoApplication.class</exclude>
+						<exclude>com/fiap/tech/restaurante/application/scheduler/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -194,6 +194,20 @@
 								</rule>
 							</rules>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>0.0.43</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<inherited>true</inherited>
+						<goals>
+							<goal>validate</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

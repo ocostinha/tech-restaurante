@@ -15,17 +15,25 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationResponseDTO {
-    private Long id;
-    private String status;
-    private Integer seatsReserved;
-    private String reservationOwnerName;
-    private String reservationOwnerEmail;
-    private LocalDate reservationDate;
-    private LocalTime reservationHour;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+	private Long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+	private String status;
+
+	private Integer seatsReserved;
+
+	private String reservationOwnerName;
+
+	private String reservationOwnerEmail;
+
+	private LocalDate reservationDate;
+
+	private LocalTime reservationHour;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime updatedAt;
+
 }

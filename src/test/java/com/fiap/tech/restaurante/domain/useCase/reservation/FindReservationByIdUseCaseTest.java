@@ -19,58 +19,61 @@ import static org.mockito.Mockito.*;
 
 class FindReservationByIdUseCaseTest {
 
-    @Mock
-    private ReservationRepository repository;
+	@Mock
+	private ReservationRepository repository;
 
-    @Mock
-    private ReservationMapperImpl mapper;
+	@Mock
+	private ReservationMapperImpl mapper;
 
-    @InjectMocks
-    private FindReservationByIdUseCase findReservationByIdUseCase;
+	@InjectMocks
+	private FindReservationByIdUseCase findReservationByIdUseCase;
 
-    private Long validId;
-    private Long invalidId;
-    private ReservationEntity reservation;
+	private Long validId;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        validId = 1L;
-        invalidId = 2L;
-        reservation = new ReservationEntity();
-        reservation.setId(validId);
-    }
+	private Long invalidId;
 
-    @Test
-    void findReservation_ShouldReturnReservation_WhenValidIdIsGiven() {
-        when(repository.findById(validId)).thenReturn(Optional.of(reservation));
-        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
+	private ReservationEntity reservation;
 
-        Reservation foundReservation = findReservationByIdUseCase.execute(validId);
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+		validId = 1L;
+		invalidId = 2L;
+		reservation = new ReservationEntity();
+		reservation.setId(validId);
+	}
 
-        assertNotNull(foundReservation);
-        assertEquals(validId, foundReservation.getId());
-        verify(repository, times(1)).findById(validId);
-    }
+	@Test
+	void findReservation_ShouldReturnReservation_WhenValidIdIsGiven() {
+		when(repository.findById(validId)).thenReturn(Optional.of(reservation));
+		doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
 
-    @Test
-    void findReservation_ShouldThrowUnprocessableEntityException_WhenIdIsNull() {
-        UnprocessableEntityException exception = assertThrows(UnprocessableEntityException.class,
-                () -> findReservationByIdUseCase.execute(null));
+		Reservation foundReservation = findReservationByIdUseCase.execute(validId);
 
-        assertEquals("O id da reserva não pode ser nulo", exception.getMessage());
-        verify(repository, never()).findById(any());
-    }
+		assertNotNull(foundReservation);
+		assertEquals(validId, foundReservation.getId());
+		verify(repository, times(1)).findById(validId);
+	}
 
-    @Test
-    void findReservation_ShouldThrowReservationNotFoundException_WhenReservationDoesNotExist() {
-        when(repository.findById(invalidId)).thenReturn(Optional.empty());
-        doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
+	@Test
+	void findReservation_ShouldThrowUnprocessableEntityException_WhenIdIsNull() {
+		UnprocessableEntityException exception = assertThrows(UnprocessableEntityException.class,
+				() -> findReservationByIdUseCase.execute(null));
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
-                () -> findReservationByIdUseCase.execute(invalidId));
+		assertEquals("O id da reserva não pode ser nulo", exception.getMessage());
+		verify(repository, never()).findById(any());
+	}
 
-        assertEquals("Reserva não encontrada", exception.getMessage());
-        verify(repository, times(1)).findById(invalidId);
-    }
+	@Test
+	void findReservation_ShouldThrowReservationNotFoundException_WhenReservationDoesNotExist() {
+		when(repository.findById(invalidId)).thenReturn(Optional.empty());
+		doCallRealMethod().when(mapper).toDomain(any(ReservationEntity.class));
+
+		ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+				() -> findReservationByIdUseCase.execute(invalidId));
+
+		assertEquals("Reserva não encontrada", exception.getMessage());
+		verify(repository, times(1)).findById(invalidId);
+	}
+
 }

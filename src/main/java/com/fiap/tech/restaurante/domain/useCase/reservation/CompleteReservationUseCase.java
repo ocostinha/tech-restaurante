@@ -13,15 +13,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CompleteReservationUseCase {
 
-    private final ReservationRepository reservationRepository;
-    private final ReservationMapper mapper;
+	private final ReservationRepository reservationRepository;
 
-    public Reservation execute(Long id) {
-        ReservationEntity reservationEntity = reservationRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Reserva não encontrada"));
+	private final ReservationMapper mapper;
 
-        reservationEntity.setStatus(ReservationStatus.COMPLETED);
+	public Reservation execute(Long id) {
+		ReservationEntity reservationEntity = reservationRepository.findById(id)
+			.orElseThrow(() -> new BusinessException("Reserva não encontrada"));
 
-        return mapper.toDomain(reservationRepository.save(reservationEntity));
-    }
+		reservationEntity.setStatus(ReservationStatus.COMPLETED);
+
+		return mapper.toDomain(reservationRepository.save(reservationEntity));
+	}
+
 }

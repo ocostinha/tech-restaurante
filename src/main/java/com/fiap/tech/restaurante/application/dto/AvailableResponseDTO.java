@@ -9,19 +9,20 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class AvailableResponseDTO {
-    private Long idRestaurant;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+	private Long idRestaurant;
 
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime hour;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate date;
 
-    private int availableSeats;
+	@JsonFormat(pattern = "HH:mm")
+	private LocalTime hour;
+
+	private int availableSeats;
+
 }

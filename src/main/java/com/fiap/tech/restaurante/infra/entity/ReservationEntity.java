@@ -18,47 +18,49 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class ReservationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
 
-    @Column(name = "id_restaurant", nullable = false)
-    private Long idRestaurant;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false, updatable = false)
+	private Long id;
 
-    @Column(name = "reservation_owner_name", nullable = false)
-    private String reservationOwnerName;
+	@Column(name = "id_restaurant", nullable = false)
+	private Long idRestaurant;
 
-    @Column(name = "reservation_owner_email", nullable = false)
-    private String reservationOwnerEmail;
+	@Column(name = "reservation_owner_name", nullable = false)
+	private String reservationOwnerName;
 
-    @Column(name = "reservation_data", nullable = false)
-    private LocalDate reservationDate;
+	@Column(name = "reservation_owner_email", nullable = false)
+	private String reservationOwnerEmail;
 
-    @Column(name = "reservation_hour", nullable = false)
-    private LocalTime reservationHour;
+	@Column(name = "reservation_data", nullable = false)
+	private LocalDate reservationDate;
 
-    @Column(name = "seats_reserved", nullable = false)
-    private Integer seatsReserved;
+	@Column(name = "reservation_hour", nullable = false)
+	private LocalTime reservationHour;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ReservationStatus status;
+	@Column(name = "seats_reserved", nullable = false)
+	private Integer seatsReserved;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
+	private ReservationStatus status;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
+
 }

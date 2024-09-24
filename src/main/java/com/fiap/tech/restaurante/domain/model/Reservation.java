@@ -13,14 +13,25 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reservation {
-    private Long id;
-    private Long idRestaurant;
-    private String reservationOwnerName;
-    private String reservationOwnerEmail;
-    private LocalDate reservationDate;
-    private LocalTime reservationHour;
-    private Integer seatsReserved;
-    private ReservationStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+	private Long id;
+
+	private Long idRestaurant;
+
+	private String reservationOwnerName;
+
+	private String reservationOwnerEmail;
+
+	private LocalDate reservationDate;
+
+	private LocalTime reservationHour;
+
+	private Integer seatsReserved;
+
+	private ReservationStatus status;
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
+
 }

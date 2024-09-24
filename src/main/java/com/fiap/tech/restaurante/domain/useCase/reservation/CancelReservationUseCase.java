@@ -1,6 +1,5 @@
 package com.fiap.tech.restaurante.domain.useCase.reservation;
 
-
 import com.fiap.tech.restaurante.domain.enums.ReservationStatus;
 import com.fiap.tech.restaurante.domain.exception.ResourceNotFoundException;
 import com.fiap.tech.restaurante.domain.mappers.ReservationMapper;
@@ -15,24 +14,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CancelReservationUseCase {
 
-    private final ReservationRepository reservationRepository;
-    private final UpdateAvailableUseCase updateAvailableUseCase;
-    private final ReservationMapper mapper;
+	private final ReservationRepository reservationRepository;
 
-    public Reservation execute(Long reservationId) {
-        ReservationEntity reservationEntity = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+	private final UpdateAvailableUseCase updateAvailableUseCase;
 
-        reservationEntity.setStatus(ReservationStatus.CANCELED);
-        Reservation updatedReservation = mapper.toDomain(reservationRepository.save(reservationEntity));
+	private final ReservationMapper mapper;
 
-        updateAvailableUseCase.execute(
-                reservationEntity.getIdRestaurant(),
-                reservationEntity.getSeatsReserved(),
-                reservationEntity.getReservationDate(),
-                reservationEntity.getReservationHour()
-        );
+	public Reservation execute(Long reservationId) {
+		ReservationEntity reservationEntity = reservationRepository.findById(reservationId)
+			.orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
-        return updatedReservation;
-    }
+		reservationEntity.setStatus(ReservationStatus.CANCELED);
+		Reservation updatedReservation = mapper.toDomain(reservationRepository.save(reservationEntity));
+
+		updateAvailableUseCase.execute(reservationEntity.getIdRestaurant(), reservationEntity.getSeatsReserved(),
+				reservationEntity.getReservationDate(), reservationEntity.getReservationHour());
+
+		return updatedReservation;
+	}
+
 }

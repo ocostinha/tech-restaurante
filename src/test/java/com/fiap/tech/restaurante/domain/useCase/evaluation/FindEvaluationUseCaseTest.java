@@ -20,60 +20,61 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class FindEvaluationUseCaseTest {
 
-    @InjectMocks
-    private FindEvaluationUseCase findEvaluationUseCase;
+	@InjectMocks
+	private FindEvaluationUseCase findEvaluationUseCase;
 
-    @Mock
-    private EvaluationRepository evaluationRepository;
+	@Mock
+	private EvaluationRepository evaluationRepository;
 
-    @Mock
-    private EvaluationMapper evaluationMapper;
+	@Mock
+	private EvaluationMapper evaluationMapper;
 
-    private Evaluation evaluation;
-    private EvaluationEntity evaluationEntity;
+	private Evaluation evaluation;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
-        evaluation = new Evaluation(1L, 1L, 1L, "Great service", 5, null, null);
-        evaluationEntity = new EvaluationEntity(1L, 1L, 1L, "Great service", 5, null, null);
-    }
+	private EvaluationEntity evaluationEntity;
 
-    @Test
-    void shouldReturnEvaluationsByRestaurant() {
-        when(evaluationRepository.findByIdRestaurant(1L)).thenReturn(List.of(evaluationEntity));
-        when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
+		evaluation = new Evaluation(1L, 1L, 1L, "Great service", 5, null, null);
+		evaluationEntity = new EvaluationEntity(1L, 1L, 1L, "Great service", 5, null, null);
+	}
 
-        List<Evaluation> result = findEvaluationUseCase.execute(1L, null);
+	@Test
+	void shouldReturnEvaluationsByRestaurant() {
+		when(evaluationRepository.findByIdRestaurant(1L)).thenReturn(List.of(evaluationEntity));
+		when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
 
-        assertEquals(1, result.size());
-        assertEquals(evaluation.getId(), result.get(0).getId());
-        verify(evaluationRepository).findByIdRestaurant(1L);
-        verify(evaluationMapper).toDomain(evaluationEntity);
-    }
+		List<Evaluation> result = findEvaluationUseCase.execute(1L, null);
 
-    @Test
-    void shouldReturnEvaluationByReserve() {
-        when(evaluationRepository.findByIdReserve(1L)).thenReturn(Optional.of(evaluationEntity));
-        when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
+		assertEquals(1, result.size());
+		assertEquals(evaluation.getId(), result.getFirst().getId());
+		verify(evaluationRepository).findByIdRestaurant(1L);
+		verify(evaluationMapper).toDomain(evaluationEntity);
+	}
 
-        List<Evaluation> result = findEvaluationUseCase.execute(null, 1L);
+	@Test
+	void shouldReturnEvaluationByReserve() {
+		when(evaluationRepository.findByIdReserve(1L)).thenReturn(Optional.of(evaluationEntity));
+		when(evaluationMapper.toDomain(evaluationEntity)).thenReturn(evaluation);
 
-        assertEquals(1, result.size());
-        assertEquals(evaluation.getId(), result.get(0).getId());
-        verify(evaluationRepository).findByIdReserve(1L);
-        verify(evaluationMapper).toDomain(evaluationEntity);
-    }
+		List<Evaluation> result = findEvaluationUseCase.execute(null, 1L);
 
-    @Test
-    void shouldReturnEmptyListWhenNoEvaluationsByRestaurant() {
-        when(evaluationRepository.findByIdRestaurant(1L)).thenReturn(List.of());
+		assertEquals(1, result.size());
+		assertEquals(evaluation.getId(), result.getFirst().getId());
+		verify(evaluationRepository).findByIdReserve(1L);
+		verify(evaluationMapper).toDomain(evaluationEntity);
+	}
 
-        List<Evaluation> result = findEvaluationUseCase.execute(1L, null);
+	@Test
+	void shouldReturnEmptyListWhenNoEvaluationsByRestaurant() {
+		when(evaluationRepository.findByIdRestaurant(1L)).thenReturn(List.of());
 
-        assertTrue(result.isEmpty());
+		List<Evaluation> result = findEvaluationUseCase.execute(1L, null);
 
-        verify(evaluationRepository).findByIdRestaurant(1L);
-    }
+		assertTrue(result.isEmpty());
 
-    }
+		verify(evaluationRepository).findByIdRestaurant(1L);
+	}
+
+}

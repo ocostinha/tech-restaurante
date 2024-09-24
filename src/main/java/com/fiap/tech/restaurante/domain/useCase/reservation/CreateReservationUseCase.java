@@ -15,39 +15,33 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateReservationUseCase {
 
-    private final RestaurantRepository restaurantRepository;
-    private final ReservationRepository reservationRepository;
-    private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
-    private final UpdateAvailableUseCase updateAvailableUseCase;
-    private final ReservationMapper mapper;
+	private final RestaurantRepository restaurantRepository;
 
-    public Reservation execute(Reservation reservationRequest) {
-        restaurantRepository.findById(reservationRequest.getIdRestaurant())
-                .orElseThrow(() -> new BusinessException("Restaurante não encontrado"));
+	private final ReservationRepository reservationRepository;
 
-        Available availability = findAvailabilityByDataAndHourUseCase.execute(
-                reservationRequest.getIdRestaurant(),
-                reservationRequest.getReservationDate(),
-                reservationRequest.getReservationHour()
-        );
+	private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
 
-        if (availability.getAvailableSeats() < reservationRequest.getSeatsReserved()) {
-            throw new BusinessException("Não há assentos disponíveis para o horário solicitado.");
-        }
+	private final UpdateAvailableUseCase updateAvailableUseCase;
 
-        Reservation reservation = mapper.toDomain(
-                reservationRepository.save(
-                        mapper.toEntity(reservationRequest)
-                )
-        );
+	private final ReservationMapper mapper;
 
-        updateAvailableUseCase.execute(
-                reservation.getIdRestaurant(),
-                (reservation.getSeatsReserved() * -1),
-                reservation.getReservationDate(),
-                reservation.getReservationHour()
-        );
+	public Reservation execute(Reservation reservationRequest) {
+		restaurantRepository.findById(reservationRequest.getIdRestaurant())
+			.orElseThrow(() -> new BusinessException("Restaurante não encontrado"));
 
-        return reservation;
-    }
+		Available availability = findAvailabilityByDataAndHourUseCase.execute(reservationRequest.getIdRestaurant(),
+				reservationRequest.getReservationDate(), reservationRequest.getReservationHour());
+
+		if (availability.getAvailableSeats() < reservationRequest.getSeatsReserved()) {
+			throw new BusinessException("Não há assentos disponíveis para o horário solicitado.");
+		}
+
+		Reservation reservation = mapper.toDomain(reservationRepository.save(mapper.toEntity(reservationRequest)));
+
+		updateAvailableUseCase.execute(reservation.getIdRestaurant(), (reservation.getSeatsReserved() * -1),
+				reservation.getReservationDate(), reservation.getReservationHour());
+
+		return reservation;
+	}
+
 }

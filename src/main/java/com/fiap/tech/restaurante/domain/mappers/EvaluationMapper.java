@@ -10,19 +10,21 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface EvaluationMapper {
-    Evaluation toDomain(EvaluationEntity entity);
 
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    Evaluation toDomain(EvaluationRequestDTO entity);
+	Evaluation toDomain(EvaluationEntity entity);
 
-    EvaluationResponseDTO toResponseDTO(Evaluation domain);
+	@Mapping(target = "updatedAt", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	Evaluation toDomain(EvaluationRequestDTO entity);
 
-    EvaluationEntity toEntity(Evaluation domain);
+	EvaluationResponseDTO toResponseDTO(Evaluation domain);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    EvaluationEntity update(Evaluation domain, @MappingTarget EvaluationEntity entity);
+	EvaluationEntity toEntity(Evaluation domain);
+
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "updatedAt", ignore = true)
+	EvaluationEntity update(Evaluation domain, @MappingTarget EvaluationEntity entity);
+
 }

@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = RestauranteApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @RunWith(Cucumber.class)
 class RestauranteApplicationTest {
-    @Test
-    void contextLoads() {
-    }
+
+	@Test
+	void contextLoads() {
+	}
+
 }

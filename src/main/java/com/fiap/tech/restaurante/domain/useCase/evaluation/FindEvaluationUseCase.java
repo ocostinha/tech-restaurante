@@ -12,18 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 public class FindEvaluationUseCase {
 
-    private final EvaluationRepository repository;
-    private final EvaluationMapper mapper;
+	private final EvaluationRepository repository;
 
-    public List<Evaluation> execute(Long idRestaurant, Long idReserve) {
-        if (idReserve == null) {
-            return repository.findByIdRestaurant(idRestaurant).stream().map(mapper::toDomain).toList();
-        }
+	private final EvaluationMapper mapper;
 
-        return List.of(
-                mapper.toDomain(
-                        repository.findByIdReserve(idReserve).orElse(null)
-                )
-        );
-    }
+	public List<Evaluation> execute(Long idRestaurant, Long idReserve) {
+		if (idReserve == null) {
+			return repository.findByIdRestaurant(idRestaurant).stream().map(mapper::toDomain).toList();
+		}
+
+		return List.of(mapper.toDomain(repository.findByIdReserve(idReserve).orElse(null)));
+	}
+
 }

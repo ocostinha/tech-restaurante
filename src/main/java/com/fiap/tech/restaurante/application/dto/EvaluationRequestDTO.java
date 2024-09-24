@@ -15,16 +15,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EvaluationRequestDTO {
 
-    @NotNull
-    private Long idRestaurant;
+	@NotNull
+	private Long idRestaurant;
 
-    @NotNull
-    private Long idReserve;
+	@NotNull
+	private Long idReserve;
 
-    @NotBlank
-    private String evaluation;
+	@NotBlank
+	private String evaluation;
 
-    @Min(1)
-    @Max(10)
-    private int grade;
+	@Min(1)
+	@Max(10)
+	private int grade;
+
 }

@@ -13,19 +13,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DeleteRestaurantByIdUseCase {
 
-    private final FindReservationUseCase findReservationUseCase;
-    private final RestaurantRepository restaurantRepository;
+	private final FindReservationUseCase findReservationUseCase;
 
-    public void execute(Long id) {
-        if (!findReservationUseCase.execute(id, LocalDate.now(), null, ReservationStatus.CONFIRMED).isEmpty()) {
-            throw new BusinessException(
-                    "Apenas restaurantes sem reserva confirmada para a data de hoje podem ser excluídos"
-            );
-        }
+	private final RestaurantRepository restaurantRepository;
 
-        restaurantRepository.delete(
-                restaurantRepository.findById(id).orElseThrow(() -> new BusinessException("Restaurante não encontrado"))
-        );
-    }
+	public void execute(Long id) {
+		if (!findReservationUseCase.execute(id, LocalDate.now(), null, ReservationStatus.CONFIRMED).isEmpty()) {
+			throw new BusinessException(
+					"Apenas restaurantes sem reserva confirmada para a data de hoje podem ser excluídos");
+		}
+
+		restaurantRepository.delete(restaurantRepository.findById(id)
+			.orElseThrow(() -> new BusinessException("Restaurante não encontrado")));
+	}
+
 }
-

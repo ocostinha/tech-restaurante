@@ -13,25 +13,25 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class CreateEvaluationUseCase {
-    private final EvaluationRepository repository;
-    private final FindReservationByIdUseCase findReservationByIdUseCase;
-    private final EvaluationMapper mapper;
 
-    public Evaluation execute(Evaluation evaluation) {
-        Reservation reservation = findReservationByIdUseCase.execute(evaluation.getIdRestaurant());
+	private final EvaluationRepository repository;
 
-        if (reservation.getStatus() != ReservationStatus.COMPLETED) {
-            throw new BusinessException("Apenas reservas que foram completas podem ser avaliadas");
-        }
+	private final FindReservationByIdUseCase findReservationByIdUseCase;
 
-        if (repository.findByIdReserve(evaluation.getIdReserve()).isPresent()) {
-            throw new BusinessException("Apenas uma avaliação pode ser realizada para esta reserva");
-        }
+	private final EvaluationMapper mapper;
 
-        return mapper.toDomain(
-                repository.save(
-                        mapper.toEntity(evaluation)
-                )
-        );
-    }
+	public Evaluation execute(Evaluation evaluation) {
+		Reservation reservation = findReservationByIdUseCase.execute(evaluation.getIdRestaurant());
+
+		if (reservation.getStatus() != ReservationStatus.COMPLETED) {
+			throw new BusinessException("Apenas reservas que foram completas podem ser avaliadas");
+		}
+
+		if (repository.findByIdReserve(evaluation.getIdReserve()).isPresent()) {
+			throw new BusinessException("Apenas uma avaliação pode ser realizada para esta reserva");
+		}
+
+		return mapper.toDomain(repository.save(mapper.toEntity(evaluation)));
+	}
+
 }

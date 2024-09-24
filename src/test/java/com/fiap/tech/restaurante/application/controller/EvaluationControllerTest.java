@@ -24,93 +24,98 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class EvaluationControllerTest {
 
-    @InjectMocks
-    private EvaluationController evaluationController;
+	@InjectMocks
+	private EvaluationController evaluationController;
 
-    @Mock
-    private CreateEvaluationUseCase createEvaluationUseCase;
+	@Mock
+	private CreateEvaluationUseCase createEvaluationUseCase;
 
-    @Mock
-    private FindEvaluationUseCase findEvaluationUseCase;
+	@Mock
+	private FindEvaluationUseCase findEvaluationUseCase;
 
-    @Mock
-    private EvaluationMapper evaluationMapper;
+	@Mock
+	private EvaluationMapper evaluationMapper;
 
-    private EvaluationRequestDTO evaluationRequestDTO;
-    private Evaluation evaluation;
-    private EvaluationResponseDTO evaluationResponseDTO;
+	private EvaluationRequestDTO evaluationRequestDTO;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
-        evaluationRequestDTO = new EvaluationRequestDTO(1L, 1L, "Ótimo restaurante", 5);
-        evaluation = new Evaluation(1L, 1L, 1L, "Ótimo restaurante", 5, LocalDateTime.now(), LocalDateTime.now());
-        evaluationResponseDTO = new EvaluationResponseDTO(1L, 1L, 1L, "Ótimo restaurante", 5, LocalDateTime.now(), LocalDateTime.now());
-    }
+	private Evaluation evaluation;
 
-    @Test
-    void createEvaluationSuccessfully() {
-        when(evaluationMapper.toDomain(any(EvaluationRequestDTO.class))).thenReturn(evaluation);
-        when(createEvaluationUseCase.execute(any(Evaluation.class))).thenReturn(evaluation);
-        when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
+	private EvaluationResponseDTO evaluationResponseDTO;
 
-        EvaluationResponseDTO result = evaluationController.createEvaluation(evaluationRequestDTO);
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
+		evaluationRequestDTO = new EvaluationRequestDTO(1L, 1L, "Ótimo restaurante", 5);
+		evaluation = new Evaluation(1L, 1L, 1L, "Ótimo restaurante", 5, LocalDateTime.now(), LocalDateTime.now());
+		evaluationResponseDTO = new EvaluationResponseDTO(1L, 1L, 1L, "Ótimo restaurante", 5, LocalDateTime.now(),
+				LocalDateTime.now());
+	}
 
-        assertNotNull(result);
-        assertEquals(evaluationResponseDTO.getId(), result.getId());
-        assertEquals(evaluationResponseDTO.getIdRestaurant(), result.getIdRestaurant());
-        assertEquals(evaluationResponseDTO.getIdReserve(), result.getIdReserve());
+	@Test
+	void createEvaluationSuccessfully() {
+		when(evaluationMapper.toDomain(any(EvaluationRequestDTO.class))).thenReturn(evaluation);
+		when(createEvaluationUseCase.execute(any(Evaluation.class))).thenReturn(evaluation);
+		when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
 
-        verify(createEvaluationUseCase).execute(any(Evaluation.class));
-        verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
-    }
+		EvaluationResponseDTO result = evaluationController.createEvaluation(evaluationRequestDTO);
 
-    @Test
-    void findEvaluationsSuccessfully() {
-        List<Evaluation> evaluations = new ArrayList<>();
-        evaluations.add(evaluation);
-        when(findEvaluationUseCase.execute(1L, null)).thenReturn(evaluations);
-        when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
+		assertNotNull(result);
+		assertEquals(evaluationResponseDTO.getId(), result.getId());
+		assertEquals(evaluationResponseDTO.getIdRestaurant(), result.getIdRestaurant());
+		assertEquals(evaluationResponseDTO.getIdReserve(), result.getIdReserve());
 
-        List<EvaluationResponseDTO> result = evaluationController.findReservations(1L, null);
+		verify(createEvaluationUseCase).execute(any(Evaluation.class));
+		verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
+	}
 
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-        assertEquals(evaluationResponseDTO.getId(), result.get(0).getId());
-        assertEquals(evaluationResponseDTO.getIdRestaurant(), result.get(0).getIdRestaurant());
-        assertEquals(evaluationResponseDTO.getIdReserve(), result.get(0).getIdReserve());
+	@Test
+	void findEvaluationsSuccessfully() {
+		List<Evaluation> evaluations = new ArrayList<>();
+		evaluations.add(evaluation);
+		when(findEvaluationUseCase.execute(1L, null)).thenReturn(evaluations);
+		when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
 
-        verify(findEvaluationUseCase).execute(1L, null);
-        verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
-    }
+		List<EvaluationResponseDTO> result = evaluationController.findReservations(1L, null);
 
-    @Test
-    void findEvaluationsByReserveIdSuccessfully() {
-        List<Evaluation> evaluations = new ArrayList<>();
-        evaluations.add(evaluation);
-        when(findEvaluationUseCase.execute(null, 1L)).thenReturn(evaluations);
-        when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
+		assertNotNull(result);
+		assertFalse(result.isEmpty());
+		assertEquals(evaluationResponseDTO.getId(), result.getFirst().getId());
+		assertEquals(evaluationResponseDTO.getIdRestaurant(), result.getFirst().getIdRestaurant());
+		assertEquals(evaluationResponseDTO.getIdReserve(), result.getFirst().getIdReserve());
 
-        List<EvaluationResponseDTO> result = evaluationController.findReservations(null, 1L);
+		verify(findEvaluationUseCase).execute(1L, null);
+		verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
+	}
 
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
-        assertEquals(evaluationResponseDTO.getId(), result.get(0).getId());
-        assertEquals(evaluationResponseDTO.getIdRestaurant(), result.get(0).getIdRestaurant());
-        assertEquals(evaluationResponseDTO.getIdReserve(), result.get(0).getIdReserve());
+	@Test
+	void findEvaluationsByReserveIdSuccessfully() {
+		List<Evaluation> evaluations = new ArrayList<>();
+		evaluations.add(evaluation);
+		when(findEvaluationUseCase.execute(null, 1L)).thenReturn(evaluations);
+		when(evaluationMapper.toResponseDTO(any(Evaluation.class))).thenReturn(evaluationResponseDTO);
 
-        verify(findEvaluationUseCase).execute(null, 1L);
-        verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
-    }
+		List<EvaluationResponseDTO> result = evaluationController.findReservations(null, 1L);
 
-    @Test
-    void shouldThrowResponseStatusExceptionWhenEvaluationNotFound() {
-        when(findEvaluationUseCase.execute(2L, null)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+		assertNotNull(result);
+		assertFalse(result.isEmpty());
+		assertEquals(1, result.size());
+		assertEquals(evaluationResponseDTO.getId(), result.getFirst().getId());
+		assertEquals(evaluationResponseDTO.getIdRestaurant(), result.getFirst().getIdRestaurant());
+		assertEquals(evaluationResponseDTO.getIdReserve(), result.getFirst().getIdReserve());
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> evaluationController.findReservations(2L, null));
+		verify(findEvaluationUseCase).execute(null, 1L);
+		verify(evaluationMapper).toResponseDTO(any(Evaluation.class));
+	}
 
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
-        verify(findEvaluationUseCase).execute(2L, null);
-    }
+	@Test
+	void shouldThrowResponseStatusExceptionWhenEvaluationNotFound() {
+		when(findEvaluationUseCase.execute(2L, null)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+				() -> evaluationController.findReservations(2L, null));
+
+		assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+		verify(findEvaluationUseCase).execute(2L, null);
+	}
+
 }

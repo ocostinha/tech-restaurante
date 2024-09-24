@@ -8,7 +8,11 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Seat {
-    private Long id;
-    private Long idRestaurant;
-    private Integer availableSeats;
+
+	private Long id;
+
+	private Long idRestaurant;
+
+	private Integer availableSeats;
+
 }

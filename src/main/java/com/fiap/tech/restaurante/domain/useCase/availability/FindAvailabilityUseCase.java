@@ -13,18 +13,32 @@ import java.util.List;
 @AllArgsConstructor
 public class FindAvailabilityUseCase {
 
-    private final AvailableRepository availableRepository;
-    private final AvailableMapper mapper;
+	private final AvailableRepository availableRepository;
 
-    public List<Available> execute(Integer seats, LocalTime hour, Long idRestaurant) {
-        if (seats == null && hour == null) {
-            return availableRepository.findByIdRestaurant(idRestaurant).stream().map(mapper::toDomain).toList();
-        } else if (seats != null && hour != null) {
-            return availableRepository.findByAvailableSeatsGreaterThanEqualAndHourAndIdRestaurant(seats, hour, idRestaurant).stream().map(mapper::toDomain).toList();
-        } else if (seats != null) {
-            return availableRepository.findByAvailableSeatsGreaterThanEqualAndIdRestaurant(seats, idRestaurant).stream().map(mapper::toDomain).toList();
-        }
+	private final AvailableMapper mapper;
 
-        return availableRepository.findByHourAndIdRestaurant(hour, idRestaurant).stream().map(mapper::toDomain).toList();
-    }
+	public List<Available> execute(Integer seats, LocalTime hour, Long idRestaurant) {
+		if (seats == null && hour == null) {
+			return availableRepository.findByIdRestaurant(idRestaurant).stream().map(mapper::toDomain).toList();
+		}
+		else if (seats != null && hour != null) {
+			return availableRepository
+				.findByAvailableSeatsGreaterThanEqualAndHourAndIdRestaurant(seats, hour, idRestaurant)
+				.stream()
+				.map(mapper::toDomain)
+				.toList();
+		}
+		else if (seats != null) {
+			return availableRepository.findByAvailableSeatsGreaterThanEqualAndIdRestaurant(seats, idRestaurant)
+				.stream()
+				.map(mapper::toDomain)
+				.toList();
+		}
+
+		return availableRepository.findByHourAndIdRestaurant(hour, idRestaurant)
+			.stream()
+			.map(mapper::toDomain)
+			.toList();
+	}
+
 }

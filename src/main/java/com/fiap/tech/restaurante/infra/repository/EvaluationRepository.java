@@ -9,7 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface EvaluationRepository extends JpaRepository<EvaluationEntity, Long> {
-    List<EvaluationEntity> findByIdRestaurant(Long idRestaurant);
 
-    Optional<EvaluationEntity> findByIdReserve(Long idReserve);
+	List<EvaluationEntity> findByIdRestaurant(Long idRestaurant);
+
+	Optional<EvaluationEntity> findByIdReserve(Long idReserve);
+
 }

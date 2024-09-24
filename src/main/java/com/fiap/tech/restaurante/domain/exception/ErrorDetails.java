@@ -12,8 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorDetails {
-    private LocalDateTime timestamp;
-    private int status;
-    private String message;
-    private String details;
+
+	private LocalDateTime timestamp;
+
+	private int status;
+
+	private String message;
+
+	private String details;
+
 }

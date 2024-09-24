@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class AvailabilityScheduler {
 
-    private final CreateAvailabilityUseCase createAvailabilityUseCase;
+	private final CreateAvailabilityUseCase createAvailabilityUseCase;
 
-    @Scheduled(cron = "0 0 4 * * ?")
-    public void generateDailyAvailability() {
-        createAvailabilityUseCase.execute();
-    }
+	@Scheduled(cron = "0 0 4 * * ?")
+	public void generateDailyAvailability() {
+		createAvailabilityUseCase.execute();
+	}
+
 }

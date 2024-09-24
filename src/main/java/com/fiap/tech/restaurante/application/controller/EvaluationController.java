@@ -24,47 +24,38 @@ import java.util.List;
 @AllArgsConstructor
 public class EvaluationController {
 
-    private final CreateEvaluationUseCase createEvaluationUseCase;
-    private final FindEvaluationUseCase findEvaluationUseCase;
-    private final EvaluationMapper mapper;
+	private final CreateEvaluationUseCase createEvaluationUseCase;
 
-    @Operation(summary = "Avaliar restaurante")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Avaliação recebida com sucess",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDTO.class))}),
-            @ApiResponse(responseCode = "400", description = "Erro na validação de campos",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorDetails.class))),
-            @ApiResponse(responseCode = "422", description = "Erro de regra de negócio",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorDetails.class)))
-    })
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public EvaluationResponseDTO createEvaluation(@Valid @RequestBody EvaluationRequestDTO request) {
-        return mapper.toResponseDTO(
-                createEvaluationUseCase.execute(
-                        mapper.toDomain(request)
-                )
-        );
-    }
+	private final FindEvaluationUseCase findEvaluationUseCase;
 
-    @Operation(summary = "Obter avaliações")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Avaliações filtradas",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = EvaluationResponseDTO.class))})
-    })
-    @GetMapping("/get")
-    @ResponseStatus(HttpStatus.OK)
-    public List<EvaluationResponseDTO> findReservations(
-            @RequestParam(required = false) Long idRestaurant,
-            @RequestParam(required = false) Long idReserve
-    ) {
-        return findEvaluationUseCase.execute(
-                idRestaurant,
-                idReserve
-        ).stream().map(mapper::toResponseDTO).toList();
-    }
+	private final EvaluationMapper mapper;
+
+	@Operation(summary = "Avaliar restaurante")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Avaliação recebida com sucess",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = RestaurantResponseDTO.class)) }),
+			@ApiResponse(responseCode = "400", description = "Erro na validação de campos",
+					content = @Content(mediaType = "application/json",
+							schema = @Schema(implementation = ErrorDetails.class))),
+			@ApiResponse(responseCode = "422", description = "Erro de regra de negócio",
+					content = @Content(mediaType = "application/json",
+							schema = @Schema(implementation = ErrorDetails.class))) })
+	@PostMapping("/create")
+	@ResponseStatus(HttpStatus.CREATED)
+	public EvaluationResponseDTO createEvaluation(@Valid @RequestBody EvaluationRequestDTO request) {
+		return mapper.toResponseDTO(createEvaluationUseCase.execute(mapper.toDomain(request)));
+	}
+
+	@Operation(summary = "Obter avaliações")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Avaliações filtradas",
+			content = { @Content(mediaType = "application/json",
+					schema = @Schema(implementation = EvaluationResponseDTO.class)) }) })
+	@GetMapping("/get")
+	@ResponseStatus(HttpStatus.OK)
+	public List<EvaluationResponseDTO> findReservations(@RequestParam(required = false) Long idRestaurant,
+			@RequestParam(required = false) Long idReserve) {
+		return findEvaluationUseCase.execute(idRestaurant, idReserve).stream().map(mapper::toResponseDTO).toList();
+	}
+
 }

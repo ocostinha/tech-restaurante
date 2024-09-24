@@ -15,25 +15,26 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ReservationRequestDTO {
 
-    @NotNull
-    private Long idRestaurant;
+	@NotNull
+	private Long idRestaurant;
 
-    @NotBlank
-    @Size(max = 120)
-    private String reservationOwnerName;
+	@NotBlank
+	@Size(max = 120)
+	private String reservationOwnerName;
 
-    @Email
-    @NotBlank
-    @Size(max = 120)
-    private String reservationOwnerEmail;
+	@Email
+	@NotBlank
+	@Size(max = 120)
+	private String reservationOwnerEmail;
 
-    @NotNull
-    private LocalDate reservationDate;
+	@NotNull
+	private LocalDate reservationDate;
 
-    @NotNull
-    @JsonFormat(pattern = "HH:mm")
-    private String reservationHour;
+	@NotNull
+	@JsonFormat(pattern = "HH:mm")
+	private String reservationHour;
 
-    @Min(1)
-    private int seatsReserved;
+	@Min(1)
+	private int seatsReserved;
+
 }

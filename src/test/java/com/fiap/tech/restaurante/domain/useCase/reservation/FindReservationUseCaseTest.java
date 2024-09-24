@@ -18,114 +18,94 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class FindReservationUseCaseTest {
 
-    @InjectMocks
-    private FindReservationUseCase findReservationUseCase;
+	@InjectMocks
+	private FindReservationUseCase findReservationUseCase;
 
-    @Mock
-    private ReservationRepository reservationRepository;
+	@Mock
+	private ReservationRepository reservationRepository;
 
-    @Mock
-    private ReservationMapper reservationMapper;
+	@Mock
+	private ReservationMapper reservationMapper;
 
-    private ReservationEntity reservationEntity;
-    private Reservation reservation;
+	private ReservationEntity reservationEntity;
 
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
+	private Reservation reservation;
 
-        reservationEntity = ReservationEntity.builder()
-                .id(1L)
-                .idRestaurant(1L)
-                .seatsReserved(4)
-                .reservationDate(LocalDate.now())
-                .reservationHour(LocalTime.of(12, 0))
-                .status(ReservationStatus.CONFIRMED)
-                .build();
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
 
-        reservation = new Reservation(1L, 1L, "Test Test", "test@test.com", LocalDate.now(), LocalTime.of(12, 0), 4, ReservationStatus.CONFIRMED, null, null);
-    }
+		reservationEntity = ReservationEntity.builder()
+			.id(1L)
+			.idRestaurant(1L)
+			.seatsReserved(4)
+			.reservationDate(LocalDate.now())
+			.reservationHour(LocalTime.of(12, 0))
+			.status(ReservationStatus.CONFIRMED)
+			.build();
 
-    @Test
-    void shouldFindReservationsWithAllFilters() {
-        when(reservationRepository.findAll(any(Specification.class)))
-                .thenReturn(Collections.singletonList(reservationEntity));
-        when(reservationMapper.toDomain(any(ReservationEntity.class)))
-                .thenReturn(reservation);
+		reservation = new Reservation(1L, 1L, "Test Test", "test@test.com", LocalDate.now(), LocalTime.of(12, 0), 4,
+				ReservationStatus.CONFIRMED, null, null);
+	}
 
-        List<Reservation> result = findReservationUseCase.execute(
-                1L,
-                LocalDate.now(),
-                LocalTime.of(12, 0),
-                ReservationStatus.CONFIRMED
-        );
+	@Test
+	void shouldFindReservationsWithAllFilters() {
+		when(reservationRepository.findAll(any(Specification.class)))
+			.thenReturn(Collections.singletonList(reservationEntity));
+		when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
-        verify(reservationRepository).findAll(any(Specification.class));
-        verify(reservationMapper).toDomain(reservationEntity);
-    }
+		List<Reservation> result = findReservationUseCase.execute(1L, LocalDate.now(), LocalTime.of(12, 0),
+				ReservationStatus.CONFIRMED);
 
-    @Test
-    void shouldFindReservationsWithPartialFilters() {
-        when(reservationRepository.findAll(any(Specification.class)))
-                .thenReturn(Collections.singletonList(reservationEntity));
-        when(reservationMapper.toDomain(any(ReservationEntity.class)))
-                .thenReturn(reservation);
+		assertEquals(1, result.size());
+		assertEquals(1L, result.getFirst().getId());
+		verify(reservationRepository).findAll(any(Specification.class));
+		verify(reservationMapper).toDomain(reservationEntity);
+	}
 
-        List<Reservation> result = findReservationUseCase.execute(
-                1L,
-                null,
-                null,
-                ReservationStatus.CONFIRMED
-        );
+	@Test
+	void shouldFindReservationsWithPartialFilters() {
+		when(reservationRepository.findAll(any(Specification.class)))
+			.thenReturn(Collections.singletonList(reservationEntity));
+		when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
-        verify(reservationRepository).findAll(any(Specification.class));
-        verify(reservationMapper).toDomain(reservationEntity);
-    }
+		List<Reservation> result = findReservationUseCase.execute(1L, null, null, ReservationStatus.CONFIRMED);
 
-    @Test
-    void shouldReturnEmptyListWhenNoReservationsFound() {
-        when(reservationRepository.findAll(any(Specification.class)))
-                .thenReturn(Collections.emptyList());
+		assertEquals(1, result.size());
+		assertEquals(1L, result.getFirst().getId());
+		verify(reservationRepository).findAll(any(Specification.class));
+		verify(reservationMapper).toDomain(reservationEntity);
+	}
 
-        List<Reservation> result = findReservationUseCase.execute(
-                1L,
-                LocalDate.now().plusDays(1),
-                LocalTime.of(18, 0),
-                ReservationStatus.CANCELED
-        );
+	@Test
+	void shouldReturnEmptyListWhenNoReservationsFound() {
+		when(reservationRepository.findAll(any(Specification.class))).thenReturn(Collections.emptyList());
 
-        assertEquals(0, result.size());
-        verify(reservationRepository).findAll(any(Specification.class));
-        verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
-    }
+		List<Reservation> result = findReservationUseCase.execute(1L, LocalDate.now().plusDays(1), LocalTime.of(18, 0),
+				ReservationStatus.CANCELED);
 
-    @Test
-    void shouldFindReservationsWithNoFilters() {
-        when(reservationRepository.findAll(any(Specification.class)))
-                .thenReturn(Collections.singletonList(reservationEntity));
-        when(reservationMapper.toDomain(any(ReservationEntity.class)))
-                .thenReturn(reservation);
+		assertEquals(0, result.size());
+		verify(reservationRepository).findAll(any(Specification.class));
+		verify(reservationMapper, never()).toDomain(any(ReservationEntity.class));
+	}
 
-        List<Reservation> result = findReservationUseCase.execute(
-                null,
-                null,
-                null,
-                null
-        );
+	@Test
+	void shouldFindReservationsWithNoFilters() {
+		when(reservationRepository.findAll(any(Specification.class)))
+			.thenReturn(Collections.singletonList(reservationEntity));
+		when(reservationMapper.toDomain(any(ReservationEntity.class))).thenReturn(reservation);
 
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getId());
-        verify(reservationRepository).findAll(any(Specification.class));
-        verify(reservationMapper).toDomain(reservationEntity);
-    }
+		List<Reservation> result = findReservationUseCase.execute(null, null, null, null);
+
+		assertEquals(1, result.size());
+		assertEquals(1L, result.getFirst().getId());
+		verify(reservationRepository).findAll(any(Specification.class));
+		verify(reservationMapper).toDomain(reservationEntity);
+	}
+
 }

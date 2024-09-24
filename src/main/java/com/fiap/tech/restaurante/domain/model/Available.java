@@ -14,11 +14,19 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class Available {
-    private Long id;
-    private Long idRestaurant;
-    private LocalDate date;
-    private LocalTime hour;
-    private int availableSeats;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+	private Long id;
+
+	private Long idRestaurant;
+
+	private LocalDate date;
+
+	private LocalTime hour;
+
+	private int availableSeats;
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
+
 }

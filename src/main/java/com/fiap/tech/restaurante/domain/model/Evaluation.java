@@ -12,11 +12,19 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class Evaluation {
-    private Long id;
-    private Long idRestaurant;
-    private Long idReserve;
-    private String evaluation;
-    private int grade;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+	private Long id;
+
+	private Long idRestaurant;
+
+	private Long idReserve;
+
+	private String evaluation;
+
+	private int grade;
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
+
 }

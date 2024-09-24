@@ -15,37 +15,39 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class EvaluationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
 
-    @Column(name = "id_restaurant", nullable = false)
-    private Long idRestaurant;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false, updatable = false)
+	private Long id;
 
-    @Column(name = "id_reserve", nullable = false)
-    private Long idReserve;
+	@Column(name = "id_restaurant", nullable = false)
+	private Long idRestaurant;
 
-    @Column(name = "evaluation", nullable = false)
-    private String evaluation;
+	@Column(name = "id_reserve", nullable = false)
+	private Long idReserve;
 
-    @Column(name = "grade", nullable = false)
-    private int grade;
+	@Column(name = "evaluation", nullable = false)
+	private String evaluation;
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+	@Column(name = "grade", nullable = false)
+	private int grade;
 
-    @Column(name = "updatedAt", nullable = false)
-    private LocalDateTime updatedAt;
+	@Column(name = "createdAt", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+	@Column(name = "updatedAt", nullable = false)
+	private LocalDateTime updatedAt;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
+
 }

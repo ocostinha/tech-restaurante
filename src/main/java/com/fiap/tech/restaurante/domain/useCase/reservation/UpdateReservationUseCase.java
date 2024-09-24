@@ -17,38 +17,35 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UpdateReservationUseCase {
 
-    private final ReservationRepository reservationRepository;
-    private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
-    private final UpdateAvailableUseCase updateAvailableUseCase;
-    private final ReservationMapper mapper;
+	private final ReservationRepository reservationRepository;
 
-    public Reservation execute(Long reservationId, Reservation reservationUpdateRequest) {
-        ReservationEntity reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new UnprocessableEntityException("Reserva não encontrada"));
+	private final FindAvailabilityByDataAndHourUseCase findAvailabilityByDataAndHourUseCase;
 
-        if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
-            throw new BusinessException("Reservas finalizadas ou canceladas não podem ser alteradas.");
-        }
+	private final UpdateAvailableUseCase updateAvailableUseCase;
 
-        Available availability = findAvailabilityByDataAndHourUseCase.execute(
-                reservationUpdateRequest.getIdRestaurant(),
-                reservationUpdateRequest.getReservationDate(),
-                reservationUpdateRequest.getReservationHour()
-        );
+	private final ReservationMapper mapper;
 
-        if (availability.getAvailableSeats() < reservationUpdateRequest.getSeatsReserved()) {
-            throw new UnprocessableEntityException("Não há assentos suficientes disponíveis");
-        }
+	public Reservation execute(Long reservationId, Reservation reservationUpdateRequest) {
+		ReservationEntity reservation = reservationRepository.findById(reservationId)
+			.orElseThrow(() -> new UnprocessableEntityException("Reserva não encontrada"));
 
-        updateAvailableUseCase.execute(
-                reservation.getIdRestaurant(),
-                ((reservationUpdateRequest.getSeatsReserved() - reservation.getSeatsReserved()) * -1),
-                reservation.getReservationDate(),
-                reservation.getReservationHour()
-        );
+		if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
+			throw new BusinessException("Reservas finalizadas ou canceladas não podem ser alteradas.");
+		}
 
-        return mapper.toDomain(
-                reservationRepository.save(mapper.update(reservationUpdateRequest, reservation))
-        );
-    }
+		Available availability = findAvailabilityByDataAndHourUseCase.execute(
+				reservationUpdateRequest.getIdRestaurant(), reservationUpdateRequest.getReservationDate(),
+				reservationUpdateRequest.getReservationHour());
+
+		if (availability.getAvailableSeats() < reservationUpdateRequest.getSeatsReserved()) {
+			throw new UnprocessableEntityException("Não há assentos suficientes disponíveis");
+		}
+
+		updateAvailableUseCase.execute(reservation.getIdRestaurant(),
+				((reservationUpdateRequest.getSeatsReserved() - reservation.getSeatsReserved()) * -1),
+				reservation.getReservationDate(), reservation.getReservationHour());
+
+		return mapper.toDomain(reservationRepository.save(mapper.update(reservationUpdateRequest, reservation)));
+	}
+
 }
