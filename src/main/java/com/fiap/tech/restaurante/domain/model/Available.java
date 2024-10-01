@@ -1,9 +1,6 @@
 package com.fiap.tech.restaurante.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Available {
 
 	private Long id;

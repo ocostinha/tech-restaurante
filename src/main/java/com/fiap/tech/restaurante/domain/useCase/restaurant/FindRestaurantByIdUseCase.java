@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FindRestaurantByIdUseCase {
 
-	private RestaurantRepository restaurantRepository;
+	private final RestaurantRepository restaurantRepository;
 
-	private RestaurantMapper mapper;
+	private final RestaurantMapper mapper;
 
 	public Restaurant execute(Long id) {
 		return mapper.toDomain(restaurantRepository.findById(id)

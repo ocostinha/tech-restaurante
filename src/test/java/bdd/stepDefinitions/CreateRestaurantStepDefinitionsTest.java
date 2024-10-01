@@ -8,7 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
-import mocks.RestaurantRequestDTOMock;
+import mocks.RestaurantMock;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,7 +40,7 @@ public class CreateRestaurantStepDefinitionsTest {
 	@NotNull
 	private ResponseEntity<RestaurantResponseDTO> createMockedRestaurant(String restaurantName) {
 		return restTemplate.postForEntity("http://localhost:8080/restaurant/create",
-				RestaurantRequestDTOMock.mock(restaurantName), RestaurantResponseDTO.class);
+				RestaurantMock.mockRequest(restaurantName), RestaurantResponseDTO.class);
 	}
 
 	@Given("Exists a restaurant with name {string}")

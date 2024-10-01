@@ -133,4 +133,6 @@ Para executar a aplicação basta utilizar os comandos na raiz do projeto
 
 O endpoint na aws é http://restaurante-loadbalancer-1926931993.us-east-1.elb.amazonaws.com/ ela está em um ECS com um LoadBalancer para fazer o gerenciamento de acesso nos pods
 
-## 
+## Heroku
+
+O endpoint na cloud Heroku é https://restaurante-tech-app-418f9f753f18.herokuapp.com/ e seu deploy acontece sempre que há uma alteração na main
