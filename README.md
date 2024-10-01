@@ -119,3 +119,18 @@ Houve um aumento na latencia de gravação pois tivemos uma sobrecarga no sistem
 
 ![img_3.png](img_3.png)
 
+## Utilizando o app
+
+## Docker - Local
+
+Para executar a aplicação basta utilizar os comandos na raiz do projeto
+
+`docker build -t restaurante-tech .`
+
+`docker run -p 8080:8080 restaurante-tech`
+
+## AWS
+
+O endpoint na aws é http://restaurante-loadbalancer-1926931993.us-east-1.elb.amazonaws.com/ ela está em um ECS com um LoadBalancer para fazer o gerenciamento de acesso nos pods
+
+## 
